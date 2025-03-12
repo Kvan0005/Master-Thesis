@@ -1,4 +1,5 @@
 #import "typyst-template/template.typ": project
+#import "@preview/dashy-todo:0.0.2": todo
 
 #show: project.with(
   title: "\todo{Title}",
@@ -17,12 +18,8 @@
       status: "Supervisor",
     )
   ),
-logo: "typyst-template/logo.png",
-abstract: |
-  \todo{Abstract}
-  \todo{Keywords}
+logo: "ulb_logo.jpg",
 )
 
 = Introduction
-
-\lipsum[1-2]
+#lorem(200)
