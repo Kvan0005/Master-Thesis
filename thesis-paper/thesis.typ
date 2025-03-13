@@ -5,12 +5,12 @@
   title: "#todo{Title}",
   authors: (
     (
-      name: "Kevin VANDERVAEREN",
-      status: "Author",
+      name: "Yannick MOLINGHEN",
+      status: "Promoter",
     ),
     (
-      name: "Yannick MOLINGHEN",
-      status: "Unknown",
+      name: "Kevin VANDERVAEREN",
+      status: "Author",
     ),
     (
       name: "Prof. Tom LENAERTS",
