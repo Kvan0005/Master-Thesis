@@ -42,9 +42,12 @@
           align(left,
             emph(authors.at(0).status) + ":" + linebreak() + authors.at(0).name
           ),
-          align(right,
+          align(center,
             emph(authors.at(1).status) + ":" + linebreak() + authors.at(1).name
           ),
+          align(right,
+            emph(authors.at(2).status) + ":" + linebreak() + authors.at(2).name
+            )
         )
       )
     )  
