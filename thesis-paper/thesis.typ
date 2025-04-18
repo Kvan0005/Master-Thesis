@@ -35,11 +35,22 @@ The objective of the Master thesis is to develop a new feature in the LLE enviro
 
 
 == Notations and Definitions
-#lorem(50)
-
 
 = State of the Art
+== Distributed artificial intelligence
+// all the following section are from the article "Cooperative Multi-Agent Learning The State of the Art" by [ref to article]
+!!(this section has content form the article "Cooperative Multi-Agent Learning The State of the Art" by [ref to article])!!
+
+Distributed artificial intelligence (DAI) is the a field of study which is rising in the last two decades. which is mainly focused on the domain of distributed systems. A distributed system by the definition of [ref to book] is a 
+(quote)"where a number of entities work together to cooperatively solve problems"(endquote). this kind of study is not new, it has been studied for a long time. But what is new is the rise of the internet and the multiple electronic devices that we have today. Which bring the need of a new field of study which is the DAI  that simply is the study of the interaction between multiple artificial intelligence (AI) or agents in a distributed system.
+=== Multi-Agent Systems vs. Distributed problems Solving
+In the field of DAI, we can find two main subfields a more traditional one which is the Distributed Problem Solving (DPS) which us the paradigm of a divide and conquer. The DPS is a field which is focused on distributing the problem to independent slaves which are solving the problem independently. On the other hand, the Multi-Agent Systems (MAS) emphasizes on the interaction between the agents. 
+
+=== Multi-Agent Systems
+
 == Cooperative Multi-Agent Reinforcement Learning
+
+
 // use article that explain different MAS article to explain what is MARL
 // new why MARL is intresting
 // get the mollinghen article to explain the LLE environment
