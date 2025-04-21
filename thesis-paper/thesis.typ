@@ -27,15 +27,24 @@ abstract: "#todo{Abstract}",
 = Introduction
 
 == Background and Objectives
-A Multi-Agent Reinforcement Learning (MARL) is a subfield of the Reinforcement Learning domain which focuses on the interaction between multiple agents in a shared environment. Through the recent years, an increasly amount of research has been conducted in this field to resolve issue that has arisen in the reel world. However, most of the research are done through simulations on environments which does not involve incremental changes. This thesis aims to evaluate the learning performance of MARL algorithms from a know environment to an slightly modified one by adding an unknown element. Under the suppervision of Prof. Tom Lenaerts, and advisor Yannick Molinghen, from the Machine Learning Group (MLG) of the Université Libre de Bruxelles (ULB).
+A Multi-Agent Reinforcement Learning (MARL) is a subfield of the Reinforcement Learning domain which focuses on the interaction between multiple agents in a shared environment. Through the recent years, an increasly amount of research has been conducted in this field to resolve issue that has arisen in the reel world. However, most of the research are done through simulations on environments which does not involve unknown elements in existing envirement. This thesis aims to evaluate the learning performance of MARL algorithms from a know environment to an slightly modified one by adding an unknown elements. Under the suppervision of Prof. Tom Lenaerts, and advisor Yannick Molinghen, from the Machine Learning Group (MLG) of the Université Libre de Bruxelles (ULB).
 
-Currently, the research is focused on the the environment of LLE (Laser Learning Reinforcement) which is a environment created by Yannick Molinghen. The environment is a grid world where a single or multiple agents are placed in a grid world. The goal of the agent is to reach a target while avoiding obstacles.
+Currently, the research is focused on the the environment of #link("https://github.com/yamoling/lle")[LLE] (Laser Learning Reinforcement) which is a environment created by Yannick Molinghen based on the original game . The environment is a 2D world also known as grid world where a single or multiple agents will be interacting. The goal of the agent is to reach an exit point while aquiring rewards (under the form of Gems) and avoiding obstacles.
 
-The objective of the Master thesis is to develop a new feature in the LLE environment that was also includes in the original Game morever this feature has also a other objective which is to add a new element in the environment which are not included in the agents learning process. 
+The objective of the Master thesis is to develop a new feature in the LLE environment that was also includes in the original game of [NameOfGame]. Morever this feature has also a other objective which is to add a new element in the environment which are not included in the agents learning process and thus reevaluate the performance of a already fine tuned model that is trained on the original environment. 
 
 
 == Notations and Definitions
+(temporary place) temporary place for some definition
+- State Space $S$
+- Agent i action space $A_i$
+- joint Action Space *$A$* = $A_1 times A_2 times ... times A_n$ where $n$ is the number of agents
+- specific action in the joint action space denoted *$a$* st. *$a$*$in$*$A$*  
+- transition function $T$ 
+- reward function $R$
+the notation will be using the notation of ref to book #link("https://spinningup.openai.com/_/downloads/en/latest/pdf/")[here]
 
+(end temporary place)
 = State of the Art
 == Distributed artificial intelligence
 // all the following section are from the article "Cooperative Multi-Agent Learning The State of the Art" by [ref to article]
@@ -47,8 +56,9 @@ Distributed artificial intelligence (DAI) is the a field of study which is risin
 In the field of DAI, we can find two main subfields a more traditional one which is the Distributed Problem Solving (DPS) which us the paradigm of a divide and conquer. The DPS is a field which is focused on distributing the problem to independent slaves which are solving the problem independently. On the other hand, the Multi-Agent Systems (MAS) emphasizes on the interaction between the agents. 
 
 === Multi-Agent Systems
-
-== Cooperative Multi-Agent Reinforcement Learning
+In MAS there are few constraints that are imposed on the agents. such as even though the agents are working together to solve a problem in a same environment they are not able to share their knowledge of the envirement with each other they may only acces to the information that they have, in RL we often refer this as a local obsevation. This is a important point because if they were able to share their knowledge this would be able to simply syncronize their knowledge and solve this problem as a DPS problem if the problem need no interaction between the agents (#todo may be more ). 
+== Multi-Agent Learning
+The Multi-Agent Learning (MAL) 
 
 
 // use article that explain different MAS article to explain what is MARL
@@ -57,9 +67,3 @@ In the field of DAI, we can find two main subfields a more traditional one which
 // explain why adding a new element in the environment is intresting
 // explain LLE agent standard
 == Multi-Agent Reinforcement Learning
-#lorem(50)
-
-
-
-
-x
