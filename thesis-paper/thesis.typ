@@ -31,10 +31,35 @@ A Multi-Agent Reinforcement Learning (MARL) is a subfield of the Reinforcement L
 
 Currently, the research is focused on the the environment of #link("https://github.com/yamoling/lle")[LLE] (Laser Learning Reinforcement) which is a environment created by Yannick Molinghen based on the original game . The environment is a 2D world also known as grid world where a single or multiple agents will be interacting. The goal of the agent is to reach an exit point while aquiring rewards (under the form of Gems) and avoiding obstacles.
 
-The objective of the Master thesis is to develop a new feature in the LLE environment that was also includes in the original game of [NameOfGame]. Morever this feature has also a other objective which is to add a new element in the environment which are not included in the agents learning process and thus reevaluate the performance of a already fine tuned model that is trained on the original environment. 
+The objective of the Master thesis is to develop a new feature in the LLE environment that was also includes in the original game of Oxen. Morever this feature has also a other objective which is to add a new element in the environment which are not included in the agents learning process and thus reevaluate the performance of a already fine tuned model that is trained on the original environment. 
 
 
 == Notations and Definitions
+#show table.cell.where(y: 0): strong
+#set table(
+  stroke: (x, y) => if y == 0 {
+    (bottom: 0.7pt + black)
+  },
+  align: (x, y) => (
+    if x > 0 { center }
+    else { left }
+  )
+
+)
+#table(
+  columns: 2,
+  table.header(
+    [Notations],
+    [Description],
+  ),
+
+  [a],[an action],
+  [s],[],
+  [
+    "T", "the transition function"
+  ],
+)
+
 (temporary place) temporary place for some definition
 - State Space $S$
 - Agent i action space $A_i$
@@ -60,10 +85,27 @@ In MAS there are few constraints that are imposed on the agents. such as even th
 == Multi-Agent Learning
 The Multi-Agent Learning (MAL) 
 
-
 // use article that explain different MAS article to explain what is MARL
 // new why MARL is intresting
 // get the mollinghen article to explain the LLE environment
 // explain why adding a new element in the environment is intresting
 // explain LLE agent standard
+== Single Agent Reinforcement Learning
+=== Markov Decision Process
+The Markov Decision Process (MDP) is a model that is used to
+often represented as a 5-tuple $angle.l S, A, T, R angle.r$ where the elements are:
+- $S$ is the state space which can be represended as a all the possible configurations of the environment 
+
+
+==== State
+A ways to represent the environment is to use a state. A state is an abstract ways to decribe the joint information of all elements in the environment. we can use as exemple the game of tick-tac-toe where the representation of the board at a given time such as this image [im] is a state. But a state is not only the representation of the board but also the information of the player turn. So a state is a representation of the environment at a given time. In the mathematical notation we usually use the notation $s$ to represent a state, and $S$ to represent the state space. The state space is the set of all possible states imagineable for a given environment. 
+
+=== Action 
+A Action reffers to the possible movement doable by the agent in the environment. In the case of the game of tick-tac-toe, the possible actions is to put a mark in one of the 9 squares. In the mathematical notation we usually use the notation $a$ to represent an action, and $A$ to represent the action space. 
+
+=== Transition
+The transition is the function that is used to represent the change of a given state 
+
 == Multi-Agent Reinforcement Learning
+=== Stationary vs. Non-stationary
+The MARL can be naively seen as adding more than 
