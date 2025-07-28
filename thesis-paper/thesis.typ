@@ -27,25 +27,25 @@ abstract: "#todo{Abstract}",
 = Introduction
 
 == Background and Objectives
-A Multi-Agent Reinforcement Learning (MARL) is a subfield of the Reinforcement Learning domain which focuses on the interaction between multiple agents in a shared environment. Through the recent years, an increasly amount of research has been conducted in this field to resolve issue that has arisen in the reel world. However, most of the research are done through simulations on environments which does not involve unknown elements in existing envirement. This thesis aims to evaluate the learning performance of MARL algorithms from a know environment to an slightly modified one by adding an unknown elements. Under the suppervision of Prof. Tom Lenaerts, and advisor Yannick Molinghen, from the Machine Learning Group (MLG) of the Université Libre de Bruxelles (ULB).
+A Multi-Agent Reinforcement Learning (MARL) is a subfield of the Reinforcement Learning domain which focuses on the interaction between multiple agents in a shared environment. Through the recent years, an increasly amount of research has been conducted in this field to resolve issue that has arisen in the reel world. However, most of the research are done through simulations on environments which does not involve unknown elements in existing envirement. This thesis aims to evaluate the learning performance of MARL algorithms from a know environment with with proven working result, to an slightly modified modified envirement by adding an unknown elements. Under the suppervision of Prof. Tom Lenaerts, and advisor Yannick Molinghen, from the Machine Learning Group (MLG) of the Université Libre de Bruxelles (ULB).
 
-Currently, the research is focused on the the environment of #link("https://github.com/yamoling/lle")[LLE] (Laser Learning Reinforcement) which is a environment created by Yannick Molinghen based on the original game . The environment is a 2D world also known as grid world where a single or multiple agents will be interacting. The goal of the agent is to reach an exit point while aquiring rewards (under the form of Gems) and avoiding obstacles.
+Currently, the research is focused on the the environment of #link("https://github.com/yamoling/lle")[LLE] (Laser Learning Reinforcement) which is a environment created by Yannick Molinghen based on the original game. The environment is a 2D world also known as grid world where a single or multiple agents will be interacting in a Cooperative manner. The goal of each individual agent is to reach an exit point while aquiring rewards (under the form of Gems) and avoiding obstacles.
 
-The objective of the Master thesis is to develop a new feature in the LLE environment that was also includes in the original game of Oxen. Morever this feature has also a other objective which is to add a new element in the environment which are not included in the agents learning process and thus reevaluate the performance of a already fine tuned model that is trained on the original environment. 
+The objective of the Master thesis is to develop a new feature in the LLE environment that was also includes in the original game of Oxen. Morever this feature has also a other objective which is to add a new element in the environment which are not included in the agents learning process and thus reevaluate the performance of a already fine tuned algorithms that is trained on the original environment and observe of any possible bottleneck that may arise from the addition of additional elements.
 
 
 == Notations and Definitions
-#show table.cell.where(y: 0): strong
-#set table(
-  stroke: (x, y) => if y == 0 {
-    (bottom: 0.7pt + black)
-  },
-  align: (x, y) => (
-    if x > 0 { center }
-    else { left }
-  )
+// #show table.cell.where(y: 0): strong
+// #set table(
+//   stroke: (x, y) => if y == 0 {
+//     (bottom: 0.7pt + black)
+//   },
+//   align: (x, y) => (
+//     if x > 0 { center }
+//     else { left }
+//   )
 
-)
+// )
 #table(
   columns: 2,
   table.header(
@@ -53,11 +53,12 @@ The objective of the Master thesis is to develop a new feature in the LLE enviro
     [Description],
   ),
 
-  [a],[an action],
-  [s],[],
-  [
-    "T", "the transition function"
-  ],
+  [S], [the state space of the environment],
+  [s], [a state in the state space given that $s in S$],
+  [$s_t$], [the state at time $t$],
+  [A], [the action space of the environment],
+  [a],[an action in the action space given that $a in A$],
+  [T], [the transition function],
 )
 
 (temporary place) temporary place for some definition
@@ -103,13 +104,15 @@ often represented as a 5-tuple $angle.l S, A, T, R angle.r$ where the elements a
 - $R$ is the reward function
 the MDP is has been formalized in the ... by ... , 
 ==== State
-A ways to represent the environment is to use a state. A state is an abstract ways to decribe the joint information of all elements in the environment. we can use as exemple the game of tick-tac-toe where the representation of the board at a given time such as this image [im] is a state. But a state is not only the representation of the board but also the information of the player turn. So a state is a representation of the environment at a given time. In the mathematical notation we usually use the notation $s$ to represent a state, and $S$ to represent the state space. The state space is the set of all possible states imagineable for a given environment. 
+A ways to represent the environment is to use a state. A state is an abstract ways to decribe the joint information of all elements in the environment. we can use as exemple the game of tick-tac-toe where the representation of the board at a given time such as this image @state is a state. But a state is not only the representation of the board but also the information of the player turn. So a state is a representation of the environment at a given time. In the mathematical notation we usually use the notation $s$ to represent a state, and $S$ to represent the state space. The state space is the set of all possible states imagineable for a given environment. 
 - $S$ is the state space of the environment
 - $s$ is a state in the state space given that $s in S$ ($s'$ may be used for a new state)
 - $s_t$ is the state at time $t$
 
+#figure(image("images/state.png", width: 45%),
+        caption: "A state in the game of tick-tac-toe")<state>
 === Action 
-A Action reffers to the possible movement doable by the agent in the environment. In the case of the game of tick-tac-toe, the possible actions is to put a mark in one of the 9 squares. In the mathematical notation we usually use the notation $a$ to represent an action, and $A$ to represent the action space. 
+A action reffers to the possible movement doable by the agent in the environment. In the case of the game of tick-tac-toe, the possible actions is to put a mark in one of the available cell out the 9 cells, for exemple in the previous example @state the "O" player has the following possible action to choose from [top left, top center, middle right, bottom left, bottom center, bottom right]. In the mathematical notation we usually use the notation $a$ to represent an action (e.g. 'top left'), and $A$ to represent the action space (e.g list of all actions listed above). 
 - $A$ is the action space of the environment
 - $a$ is an action in the action space given that $a in A$
 // maybe ? - $a_t$ is the action at time $t$
