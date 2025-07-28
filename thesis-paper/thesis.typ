@@ -97,12 +97,16 @@ The Multi-Agent Learning (MAL)
 == Single Agent Reinforcement Learning
 === Markov Decision Process
 The Markov Decision Process (MDP) is a model that is used to
-often represented as a 5-tuple $angle.l S, A, T, R angle.r$ where the elements are:
+often represented as a 5-tuple $angle.l S, A, T, R, rho_0 angle.r$ where the elements are:
 - $S$ is the state space
 - $A$ is the action space 
 - $T$ is the transition function 
 - $R$ is the reward function
-the MDP is has been formalized in the ... by ... , 
+- $rho_0$ is the initial state distribution
+The MDP is a mathematical framework that is based on the principle of the Markov property, which states that the future state of a system only depends on the current state and not on the previous states. In mathematical term this is often represented as:
+$ Pr(s_(t+1) | s_t, a_t) = Pr(s_(t+1) | s_t, a_(t-1), ..., s_0, a_0) $
+this framework is often used to abstract the pr
+the MDP is has been formalized in the ... by ... , which 
 ==== State
 A ways to represent the environment is to use a state. A state is an abstract ways to decribe the joint information of all elements in the environment. we can use as exemple the game of tick-tac-toe where the representation of the board at a given time such as this image @state is a state. But a state is not only the representation of the board but also the information of the player turn. So a state is a representation of the environment at a given time. In the mathematical notation we usually use the notation $s$ to represent a state, and $S$ to represent the state space. The state space is the set of all possible states imagineable for a given environment. 
 - $S$ is the state space of the environment
@@ -130,7 +134,7 @@ they also posses certain properties such as:
 note that mathematically the transition function is a re-writing of the conditional probability function often represented as
 $$Pr(s'|s, a)$$ 
 === Reward
-
+Like the transition function, the reward is a function that is used between two states given a action. Instead of representing the change of a state, the reward function is to give a purpose or goal to the agent. Going back to the example of the sport, the reward can be the distance that i have lessend over the finish line.  
 == Multi-Agent Reinforcement Learning
 === Stationary vs. Non-stationary
 The MARL can be naively seen as adding more than 
