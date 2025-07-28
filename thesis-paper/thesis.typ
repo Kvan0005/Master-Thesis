@@ -90,21 +90,43 @@ The Multi-Agent Learning (MAL)
 // get the mollinghen article to explain the LLE environment
 // explain why adding a new element in the environment is intresting
 // explain LLE agent standard
+== Machine Learning
+//? is this section needed for explaining base of ML and split between SL unsupervised and RL
+
 == Single Agent Reinforcement Learning
 === Markov Decision Process
 The Markov Decision Process (MDP) is a model that is used to
 often represented as a 5-tuple $angle.l S, A, T, R angle.r$ where the elements are:
-- $S$ is the state space which can be represended as a all the possible configurations of the environment 
-
-
+- $S$ is the state space
+- $A$ is the action space 
+- $T$ is the transition function 
+- $R$ is the reward function
+the MDP is has been formalized in the ... by ... , 
 ==== State
 A ways to represent the environment is to use a state. A state is an abstract ways to decribe the joint information of all elements in the environment. we can use as exemple the game of tick-tac-toe where the representation of the board at a given time such as this image [im] is a state. But a state is not only the representation of the board but also the information of the player turn. So a state is a representation of the environment at a given time. In the mathematical notation we usually use the notation $s$ to represent a state, and $S$ to represent the state space. The state space is the set of all possible states imagineable for a given environment. 
+- $S$ is the state space of the environment
+- $s$ is a state in the state space given that $s in S$ ($s'$ may be used for a new state)
+- $s_t$ is the state at time $t$
 
 === Action 
 A Action reffers to the possible movement doable by the agent in the environment. In the case of the game of tick-tac-toe, the possible actions is to put a mark in one of the 9 squares. In the mathematical notation we usually use the notation $a$ to represent an action, and $A$ to represent the action space. 
-
+- $A$ is the action space of the environment
+- $a$ is an action in the action space given that $a in A$
+// maybe ? - $a_t$ is the action at time $t$
 === Transition
-The transition is the function that is used to represent the change of a given state 
+The transition is the function that is used to represent the change of a given state, given a action. The transition is a probability function that is used to represent the stochasticity of a given environment. A more real life example, for those who have done sport, you may have experience the case where you where about to do a certain action like a squat or a sprint but you got a cramp or a mucle tear which put you in a state where you were not expecting to be. This is a good example of the stochasticity of a given environment. If we use that example we can put it this way:
+- $s$ or $s'$ is the state of my body which is "healthy"
+- $c$ is the state of my body which is "cramped" or "unhealthy"
+- $a$ is the action that I am about to do
+and then the transition function $T$ is the function that is used to represent the change of state of my body given a action. and in this case we can simply use this notation:
+- $T(s, a, s')$ is the probability of having nothing happen to my body given a action $a$.
+- $T(s, a, c)$ is the probability of having a cramp or a muscle tear given a action $a$.
+they also posses certain properties such as:
+- the function $T$ : $S times A times S -> [0,1]$
+- $sum_(s' in S) T(s,a, s') = 1$
+note that mathematically the transition function is a re-writing of the conditional probability function often represented as
+$$Pr(s'|s, a)$$ 
+=== Reward
 
 == Multi-Agent Reinforcement Learning
 === Stationary vs. Non-stationary
