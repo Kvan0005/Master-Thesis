@@ -79,17 +79,17 @@ The objective of the Master thesis is to develop a new feature in the LLE enviro
   [$cal(R)(s,cal(a))$], [the reward function from state $s$ given joint action $cal(a)$],
   [$A^i$], [the action space of agent $i$],
   [$a^i$], [the action of agent $i$],
-  [tau], [a transition defined as $tau = angle.l s, cal(a), r, s' angle.r$],
+  [$tau$], [a transition defined as $tau = angle.l s, cal(a), r, s' angle.r$],
 )
 
-(temporary place) temporary place for some definition
-- State Space $S$
-- Agent i action space $A_i$
-- joint Action Space *$A$* = $A_1 times A_2 times ... times A_n$ where $n$ is the number of agents
-- specific action in the joint action space denoted *$a$* st. *$a$*$in$*$A$*  
-- transition function $T$ 
-- reward function $R$
-the notation will be using the notation of ref to book #link("https://spinningup.openai.com/_/downloads/en/latest/pdf/")[here]
+// (temporary place) temporary place for some definition
+// - State Space $S$
+// - Agent i action space $A_i$
+// - joint Action Space *$A$* = $A_1 times A_2 times ... times A_n$ where $n$ is the number of agents
+// - specific action in the joint action space denoted *$a$* st. *$a$*$in$*$A$*  
+// - transition function $T$ 
+// - reward function $R$
+// the notation will be using the notation of ref to book #link("https://spinningup.openai.com/_/downloads/en/latest/pdf/")[here]
 
 (end temporary place)
 = State of the Art
@@ -100,7 +100,6 @@ the notation will be using the notation of ref to book #link("https://spinningup
 Distributed artificial intelligence (DAI) is the a field of study which is rising in the last two decades. which is mainly focused on the domain of distributed systems. A distributed system by the definition of @panait_cooperative_2005 is #quote("where a number of entities work together to cooperatively solve problems") . this kind of study is not new, it has been studied for a long time. But what is new is the rise of the internet and the multiple electronic devices that we have today. Which bring the need of a new field of study which is the DAI  that simply is the study of the interaction between multiple artificial intelligence (AI) or agents in a distributed system.
 === Multi-Agent Systems vs. Distributed problems Solving
 In the field of DAI, we can find two main subfields a more traditional one which is the Distributed Problem Solving (DPS) which us the paradigm of a divide and conquer. The DPS is a field which is focused on distributing the problem to independent slaves which are solving the problem independently. On the other hand, the Multi-Agent Systems (MAS) emphasizes on the interaction between the agents. 
-
 === Multi-Agent Systems
 In MAS there are few constraints that are imposed on the agents. such as even though the agents are working together to solve a problem in a same environment they are not able to share their knowledge of the envirement with each other they may only acces to the information that they have, in RL we often refer this as a local obsevation. This is a important point because if they were able to share their knowledge this would be able to simply syncronize their knowledge and solve this problem as a DPS problem if the problem need no interaction between the agents (#todo may be more ). 
 == Multi-Agent Learning
@@ -117,12 +116,13 @@ The Multi-Agent Learning (MAL)
 === Supervised Learning
 Supervised Learning (SL) is a subfield of Machine Learning (ML) which focuses on the learning of a model from a set of labeled data. The goal of SL is to learn a function that maps as much as possible the entry data (something e.g image) to a outgoing data (or label e.g. a class of the image). The SL is often used in the field of computer vision or natural language processing. Where the goal is to get a model that is able to classify the data into a certain class based on the data that it has initially learned from training. 
 === Reinforcement Learning
-The domain of Reinforcement Learning (RL) is a subfield of Machine Learning (ML) which focuses on the interaction between an agent and its environment. Compared to supervised learning, no initial data is required for it to be able to learn. It mainly focuses on the idea of trial and error, agent by interacting with its environment will be aquiring or losing point set on predetermined rules. Thus the agents will be trying to maximize the number of points given that initial rules. 
+
+The domain of Reinforcement Learning (RL) is a subfield of Machine Learning (ML) which focuses on learning from the interaction between an agent and its environment. Compared to supervised learning, Learner (learning agent) is not provided with explicit information about the environment neither which action to perform. It mainly focuses on the idea of trial and error, by interacting with its environment the learner will be acquiring or losing points and will be his only source of feedback. Thus the agents will be trying to maximize the number of points given. @sutton_reinforcement_2014
 == Single Agent Reinforcement Learning
 === Markov Decision Process
-In a Single agent Reinforcement Learning (RL) the methodology used to model the environment is the Markov Decision Process (MDP). The MDP is a mathematical framework that is used to model the interaction between an agent and its environment. It is often used to represent the decision-making process of an agent in a stochastic environment. The MDP is a powerful tool that allows us to model the environment in a way that is easy to understand and analyze.
+In a Single agent Reinforcement Learning (RL) the methodology used to model the environment is the Markov Decision Process (MDP)@puterman_markov_2009. The MDP is a mathematical framework that is used to model the interaction between an agent and its environment(#todo find the lost ref). It is often used to represent the decision-making process of an agent in a stochastic environment. The MDP is a powerful tool that allows us to model the environment in a way that is easy to understand and analyze.
 
-The Markov Decision Process (MDP) is often represented as a 5-tuple $angle.l S, A, T, R, rho_0 angle.r$ where the elements are:
+The Markov Decision Process (MDP) @SpinningUp2018 is often represented as a 5-tuple $angle.l S, A, T, R, rho_0 angle.r$ where the elements are:
 - $S$ is the state space
 - $A$ is the action space 
 - $T$ is the transition function 
@@ -197,7 +197,10 @@ where:
 A transition is defined as $tau = angle.l s, cal(a), r, s' angle.r$ with $r in bb(R)$
 
 == Algorithm 
-the main algorithms that is best suited for the LLE envirement is the Value Decomposition Networks (VDN) 
+Bases on the current state of the LLE environment, only a few algorithms where tested on the envirement @molinghen_laser_2024.
+
+=== Value Decomposition Networks
+The Value Decomposition Networks (VDN) @sunehag_value-decomposition_2017 is a MARL algorithm that is 
 
 = Objectives
 The objective of this thesis is to develop a new feature in the LLE environment which consists of adding an lift which allow agents to have more possibilities of action. with this new feature, we aim to evaluate the performance of previously trained MARL algorithms on the original environment and observe if potential bottlenecks arise from the addition of this new element. The lift is designed to be used in conjunction with the lever, which is used to activate the lift.
