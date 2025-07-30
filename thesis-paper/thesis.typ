@@ -1,6 +1,7 @@
 #import "typyst-template/template.typ": project
 #import "@preview/dashy-todo:0.0.2": todo
 
+#set footnote(numbering: "*")
 #show: project.with(
   title: "Analyzing MARL algorithms in 
   dynamic environments: 
@@ -69,6 +70,16 @@ The objective of the Master thesis is to develop a new feature in the LLE enviro
   [$rho_0$], [the initial state distribution],
   [$pi$], [the policy],
   [$pi(s)$], [the policy at state $s$],
+  [Multi-Agent Markov Decision Process:], [],
+  [$cal(A)$], [the joint action space],
+  [$cal(a)$], [the joint action],
+  [$cal(T)(s,cal(a),s')$], [the transition function from state $s$ to state $s'$ given joint action $cal(a)$],
+  [$cal(T)(s,cal(a))$], [the transition function from state $s$ given joint action $cal(a)$],
+  [$cal(R)(s,cal(a),s')$], [the reward function from state $s$ to state $s'$ given joint action $cal(a)$],
+  [$cal(R)(s,cal(a))$], [the reward function from state $s$ given joint action $cal(a)$],
+  [$A^i$], [the action space of agent $i$],
+  [$a^i$], [the action of agent $i$],
+  [tau], [a transition defined as $tau = angle.l s, cal(a), r, s' angle.r$],
 )
 
 (temporary place) temporary place for some definition
@@ -157,7 +168,7 @@ The reward function, which takes a initial state, an action and a final state. U
 $$R(s, a, s')$$
 where $s$ is the initial state, $a$ is the action and $s'$ is the final state. 
 And mathematically the reward function is:
-- $R$ : $S times A times S ->"scalar"$
+- $R$ : $S times A times S -> bb(R)$
 == Multi-Agent Reinforcement Learning
 === Stationary vs. Non-stationary
 Originaly we can say that multiple independent agents may not increase dramaticaly in complexity from the RL with single agant but proven
@@ -172,12 +183,21 @@ The Laser Learning Environment (LLE) is a 2D grid world with discrete times and 
 == Enviroment challenges
 The envirement is aimed at testing the performance of MARL algorithms tailored for decentralized cooperative scenarios and possess some challenges that are not pressent in other envirement such as StarCraft Multi-Agent Challenge or SMAC @samvelyan_starcraft_2019 or the Hanabi environment @bard_hanabi_2020. Instead this envirement is designed to take into account other cooperating factors such as the perfect coordination, interdependence and the zero incentive dynamics@molinghen_laser_2024.
 
-== model
-The model of the environment is based on the multiagent Markov decision process (MMDPs)@boutilier_planning_nodate which is a generalization of the Markov decision process (MDP) to multiple agents. The MMDP is a tuple $angle.l n, S, cal(A), cal(T), cal(R), s_0, s_f angle.r$ 
+== multiagent Markov Decision Process
+The model of the environment is based on the multiagent Markov decision process (MMDPs)@boutilier_planning_nodate is a generalization of the Markov decision process (MDP) to multiple agents. The MMDP is a tuple $angle.l n, S, cal(A), cal(T), cal(R), s_0, s_f angle.r$ 
 where:
 - $n$ is the number of agents
 - $S$ is the set of states
-- $cal(A) equiv A_1 times A_2 times ... times A_n$ is the joint action space of all agents 
+- $cal(A) equiv A^1 times A^2 times ... times A^n$ is the joint action space and $A^i$ is the set of actions available to agent $i$ #footnote[$A^i$ has be modified from the original notation $A_i$ to avoid confusion with the action space at a given time $t$])
+- $cal(a) equiv (a^1, a^2, ..., a^n) in cal(A)$ is the joint action of all agents $a^i$ is an action of agent $i$  
+- $cal(T) : S times cal(A) arrow Delta_S$ is a function that gives the probability of transitionning from state $s$ to state $s'$ given a joint action $cal(a)$
+- $cal(R): S times cal(A) times S arrow bb(R)$ is the function return the reward obtained by the transitioning from state $s$ to state $s'$ given a joint action $cal(a)$
+- $s_0 in S$ is the initial state
+- $s_f in S$ is the final state
+A transition is defined as $tau = angle.l s, cal(a), r, s' angle.r$ with $r in bb(R)$
+
+== Algorithm 
+the main algorithms that is best suited for the LLE envirement is the Value Decomposition Networks (VDN) 
 
 = Objectives
 The objective of this thesis is to develop a new feature in the LLE environment which consists of adding an lift which allow agents to have more possibilities of action. with this new feature, we aim to evaluate the performance of previously trained MARL algorithms on the original environment and observe if potential bottlenecks arise from the addition of this new element. The lift is designed to be used in conjunction with the lever, which is used to activate the lift.
@@ -186,6 +206,8 @@ The objective of this thesis is to develop a new feature in the LLE environment 
 The lift will be a terrain type that allows agents to reach higher levels in the environment. It is designed to be used in conjunction with the lever, which is used to activate the lift. The lift can be used to reach new areas of the environment, allowing agents to explore and find new paths to their goals.
 === Lever
 The lever is a terrain type which will be intercatible for the agents are on it. The lever is used to activate the lift, allowing agents on the lift to switch floors. The lever is designed to be used in conjunction with the lift, allowing agents to reach new areas of the environment.
+=== Plane extension
+The plane extension is the addition of a new dimension which will allow the lift to move vertically... 
 == Evaluation
 ...
 
