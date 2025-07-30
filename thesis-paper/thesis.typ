@@ -27,7 +27,7 @@ abstract: "#todo{Abstract}",
 = Introduction
 
 == Background and Objectives
-A Multi-Agent Reinforcement Learning (MARL) is a subfield of the Reinforcement Learning domain which focuses on the interaction between multiple agents in a shared environment. Through the recent years, an increasly amount of research has been conducted in this field to resolve issue that has arisen in the reel world. However, most of the research are done through simulations on environments which does not involve unknown elements in existing envirement. This thesis aims to evaluate the learning performance of MARL algorithms from a know environment with with proven working result, to an slightly modified modified envirement by adding an unknown elements. Under the suppervision of Prof. Tom Lenaerts, and advisor Yannick Molinghen, from the Machine Learning Group (MLG) of the Université Libre de Bruxelles (ULB).
+A Multi-Agent Reinforcement Learning (MARL) is a subfield of the Reinforcement Learning domain which focuses on the interaction between multiple agents in a shared environment. Through the recent years, an increasly amount of research has been conducted in this field to resolve issue that has arisen in the reel world @weiss_multiagent_2001 @stone_multiagent_1997. However, most of the research are done through simulations on environments which does not involve unknown elements in existing envirement. This thesis aims to evaluate the learning performance of MARL algorithms from a know environment with with proven working result, to an slightly modified modified envirement by adding an unknown elements. Under the suppervision of Prof. Tom Lenaerts, and advisor Yannick Molinghen, from the Machine Learning Group (MLG) of the Université Libre de Bruxelles (ULB).
 
 Currently, the research is focused on the the environment of #link("https://github.com/yamoling/lle")[LLE] (Laser Learning Reinforcement) which is a environment created by Yannick Molinghen based on the original game. The environment is a 2D world also known as grid world where a single or multiple agents will be interacting in a Cooperative manner. The goal of each individual agent is to reach an exit point while aquiring rewards (under the form of Gems) and avoiding obstacles.
 
@@ -35,30 +35,40 @@ The objective of the Master thesis is to develop a new feature in the LLE enviro
 
 
 == Notations and Definitions
-// #show table.cell.where(y: 0): strong
-// #set table(
-//   stroke: (x, y) => if y == 0 {
-//     (bottom: 0.7pt + black)
-//   },
-//   align: (x, y) => (
-//     if x > 0 { center }
-//     else { left }
-//   )
-
-// )
+#show table.cell.where(y: 0): strong
+#set table(
+  stroke: (x, y) => if y == 0 {
+    (bottom:black)
+  },
+)
 #table(
   columns: 2,
   table.header(
     [Notations],
     [Description],
   ),
+  [mathematical base notation:],[],
+  [$f:X times Y arrow Z$],[a function $f$ that has a domain of $X times Y$ and return value in $Z$],
+  [$Pr(s'|s,a)$], [the probability of transitioning to state $s'$ from state $s$ given action $a$],
 
-  [S], [the state space of the environment],
-  [s], [a state in the state space given that $s in S$],
+  [Markov Decision Process:],[],
+  [$s$,$s'$], [state],
+  [$a$],[an action],
+  [$r$],[a reward],
+  [$S$], [the state space],
+  [$A$], [the action space],
+  [$t$], [discrete time step],
   [$s_t$], [the state at time $t$],
-  [A], [the action space of the environment],
-  [a],[an action in the action space given that $a in A$],
-  [T], [the transition function],
+  [$a_t$], [the action at time $t$],
+  [$r_t$], [the reward at time $t$],
+  [$A(s)$], [the action space available in state $s$],
+  [$T(s,a,s')$], [the transition function from state $s$ to state $s'$ given action $a$],
+  [$T(s,a)$], [the transition function from state $s$ given action $a$],
+  [$R(s,a,s')$], [the reward function from state $s$ to state $s'$ given action $a$],
+  [$R(s,a)$], [the reward function from state $s$ given action $a$],
+  [$rho_0$], [the initial state distribution],
+  [$pi$], [the policy],
+  [$pi(s)$], [the policy at state $s$],
 )
 
 (temporary place) temporary place for some definition
@@ -76,8 +86,7 @@ the notation will be using the notation of ref to book #link("https://spinningup
 // all the following section are from the article "Cooperative Multi-Agent Learning The State of the Art" by [ref to article]
 !!(this section has content form the article "Cooperative Multi-Agent Learning The State of the Art" by [ref to article])!!
 
-Distributed artificial intelligence (DAI) is the a field of study which is rising in the last two decades. which is mainly focused on the domain of distributed systems. A distributed system by the definition of [ref to book] is a 
-(quote)"where a number of entities work together to cooperatively solve problems"(endquote). this kind of study is not new, it has been studied for a long time. But what is new is the rise of the internet and the multiple electronic devices that we have today. Which bring the need of a new field of study which is the DAI  that simply is the study of the interaction between multiple artificial intelligence (AI) or agents in a distributed system.
+Distributed artificial intelligence (DAI) is the a field of study which is rising in the last two decades. which is mainly focused on the domain of distributed systems. A distributed system by the definition of @panait_cooperative_2005 is #quote("where a number of entities work together to cooperatively solve problems") . this kind of study is not new, it has been studied for a long time. But what is new is the rise of the internet and the multiple electronic devices that we have today. Which bring the need of a new field of study which is the DAI  that simply is the study of the interaction between multiple artificial intelligence (AI) or agents in a distributed system.
 === Multi-Agent Systems vs. Distributed problems Solving
 In the field of DAI, we can find two main subfields a more traditional one which is the Distributed Problem Solving (DPS) which us the paradigm of a divide and conquer. The DPS is a field which is focused on distributing the problem to independent slaves which are solving the problem independently. On the other hand, the Multi-Agent Systems (MAS) emphasizes on the interaction between the agents. 
 
@@ -85,28 +94,38 @@ In the field of DAI, we can find two main subfields a more traditional one which
 In MAS there are few constraints that are imposed on the agents. such as even though the agents are working together to solve a problem in a same environment they are not able to share their knowledge of the envirement with each other they may only acces to the information that they have, in RL we often refer this as a local obsevation. This is a important point because if they were able to share their knowledge this would be able to simply syncronize their knowledge and solve this problem as a DPS problem if the problem need no interaction between the agents (#todo may be more ). 
 == Multi-Agent Learning
 The Multi-Agent Learning (MAL) 
-
-// use article that explain different MAS article to explain what is MARL
-// new why MARL is intresting
-// get the mollinghen article to explain the LLE environment
-// explain why adding a new element in the environment is intresting
-// explain LLE agent standard
+(todo):
+- use article that explain different MAS article to explain what is MARL
+- new why MARL is intresting
+- get the mollinghen article to explain the LLE environment
+- explain why adding a new element in the environment is intresting
+- explain LLE agent standard
 == Machine Learning
-//? is this section needed for explaining base of ML and split between SL unsupervised and RL
-
+(todo)
+- is this section needed for explaining base of ML and split between SL unsupervised and RL
+=== Supervised Learning
+Supervised Learning (SL) is a subfield of Machine Learning (ML) which focuses on the learning of a model from a set of labeled data. The goal of SL is to learn a function that maps as much as possible the entry data (something e.g image) to a outgoing data (or label e.g. a class of the image). The SL is often used in the field of computer vision or natural language processing. Where the goal is to get a model that is able to classify the data into a certain class based on the data that it has initially learned from training. 
+=== Reinforcement Learning
+The domain of Reinforcement Learning (RL) is a subfield of Machine Learning (ML) which focuses on the interaction between an agent and its environment. Compared to supervised learning, no initial data is required for it to be able to learn. It mainly focuses on the idea of trial and error, agent by interacting with its environment will be aquiring or losing point set on predetermined rules. Thus the agents will be trying to maximize the number of points given that initial rules. 
 == Single Agent Reinforcement Learning
 === Markov Decision Process
-The Markov Decision Process (MDP) is a model that is used to
-often represented as a 5-tuple $angle.l S, A, T, R, rho_0 angle.r$ where the elements are:
+In a Single agent Reinforcement Learning (RL) the methodology used to model the environment is the Markov Decision Process (MDP). The MDP is a mathematical framework that is used to model the interaction between an agent and its environment. It is often used to represent the decision-making process of an agent in a stochastic environment. The MDP is a powerful tool that allows us to model the environment in a way that is easy to understand and analyze.
+
+The Markov Decision Process (MDP) is often represented as a 5-tuple $angle.l S, A, T, R, rho_0 angle.r$ where the elements are:
 - $S$ is the state space
 - $A$ is the action space 
 - $T$ is the transition function 
 - $R$ is the reward function
 - $rho_0$ is the initial state distribution
-The MDP is a mathematical framework that is based on the principle of the Markov property, which states that the future state of a system only depends on the current state and not on the previous states. In mathematical term this is often represented as:
+
+One of the key properties of the MDP is that it based on the Markov property, which states that the future state of a system only depends on the current state and not on the previous states. In mathematical term this is often represented as:
 $ Pr(s_(t+1) | s_t, a_t) = Pr(s_(t+1) | s_t, a_(t-1), ..., s_0, a_0) $
-this framework is often used to abstract the pr
-the MDP is has been formalized in the ... by ... , which 
+
+A another strenght is that by doing the reduction to a MDP we can abstract all sensory, memory and control aspects(ref rl: an introduction sutton and barto) to a simply 3 signal between the agent and the environment:
+- the state $s$
+- the action $a$
+- the reward $r$
+but also introduce key functions such as the Bellman equation which is used the markov properties to represent the relationship between the value of a state and the value of its successor states. 
 ==== State
 A ways to represent the environment is to use a state. A state is an abstract ways to decribe the joint information of all elements in the environment. we can use as exemple the game of tick-tac-toe where the representation of the board at a given time such as this image @state is a state. But a state is not only the representation of the board but also the information of the player turn. So a state is a representation of the environment at a given time. In the mathematical notation we usually use the notation $s$ to represent a state, and $S$ to represent the state space. The state space is the set of all possible states imagineable for a given environment. 
 - $S$ is the state space of the environment
@@ -134,7 +153,41 @@ they also posses certain properties such as:
 note that mathematically the transition function is a re-writing of the conditional probability function often represented as
 $$Pr(s'|s, a)$$ 
 === Reward
-Like the transition function, the reward is a function that is used between two states given a action. Instead of representing the change of a state, the reward function is to give a purpose or goal to the agent. Going back to the example of the sport, the reward can be the distance that i have lessend over the finish line.  
+The reward function, which takes a initial state, an action and a final state. Unlike the transition is a function which return a probability the reward function return a scalar which can be interpreted as a score. Instead of representing the change of a state, the reward function is to give a purpose or goal to the agent. Going back to the example of the sport, the score can be seen as the motivation to perform the action based on a certain goal, such as on the treadmill when you are aiming to lose certain amount of calories, the reward function is the calories burned. While running faster put you in a state where you are burning more calories but also put your body in a state that is more likely to have a cramp. The reward function is often represented as:
+$$R(s, a, s')$$
+where $s$ is the initial state, $a$ is the action and $s'$ is the final state. 
+And mathematically the reward function is:
+- $R$ : $S times A times S ->"scalar"$
 == Multi-Agent Reinforcement Learning
 === Stationary vs. Non-stationary
-The MARL can be naively seen as adding more than 
+Originaly we can say that multiple independent agents may not increase dramaticaly in complexity from the RL with single agant but proven
+The MARL can be naively seen as adding more than one agent to the RL environment. This leads to new challenges such as non-stationarity, as the presence of multiple agents can change the dynamics of the environment. 
+
+=== Search space
+
+= LLE Environment
+== Overview
+The Laser Learning Environment (LLE) is a 2D grid world with discrete times and multiple cooperative agents. The game is based on the original game of Oxen, where the goal of each agent is to reach an exit point while acquiring gems (bonus points). All agents are cooperating to reach they respective exit point while avoiding obstacles. The envirement is designed to be simple and esay to understand, while still being challenging enough to test the performance of MARL algorithms.
+
+== Enviroment challenges
+The envirement is aimed at testing the performance of MARL algorithms tailored for decentralized cooperative scenarios and possess some challenges that are not pressent in other envirement such as StarCraft Multi-Agent Challenge or SMAC @samvelyan_starcraft_2019 or the Hanabi environment @bard_hanabi_2020. Instead this envirement is designed to take into account other cooperating factors such as the perfect coordination, interdependence and the zero incentive dynamics@molinghen_laser_2024.
+
+== model
+The model of the environment is based on the multiagent Markov decision process (MMDPs)@boutilier_planning_nodate which is a generalization of the Markov decision process (MDP) to multiple agents. The MMDP is a tuple $angle.l n, S, cal(A), cal(T), cal(R), s_0, s_f angle.r$ 
+where:
+- $n$ is the number of agents
+- $S$ is the set of states
+- $cal(A) equiv A_1 times A_2 times ... times A_n$ is the joint action space of all agents 
+
+= Objectives
+The objective of this thesis is to develop a new feature in the LLE environment which consists of adding an lift which allow agents to have more possibilities of action. with this new feature, we aim to evaluate the performance of previously trained MARL algorithms on the original environment and observe if potential bottlenecks arise from the addition of this new element. The lift is designed to be used in conjunction with the lever, which is used to activate the lift.
+== Lift and Lever
+=== Lift
+The lift will be a terrain type that allows agents to reach higher levels in the environment. It is designed to be used in conjunction with the lever, which is used to activate the lift. The lift can be used to reach new areas of the environment, allowing agents to explore and find new paths to their goals.
+=== Lever
+The lever is a terrain type which will be intercatible for the agents are on it. The lever is used to activate the lift, allowing agents on the lift to switch floors. The lever is designed to be used in conjunction with the lift, allowing agents to reach new areas of the environment.
+== Evaluation
+...
+
+
+#bibliography("bibliography.bib")
