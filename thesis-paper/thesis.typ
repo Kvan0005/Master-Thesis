@@ -36,6 +36,7 @@ The objective of the Master thesis is to develop a new feature in the LLE enviro
 
 
 == Notations and Definitions
+=== Notations
 #show table.cell.where(y: 0): strong
 #set table(
   stroke: (x, y) => if y == 0 {
@@ -50,7 +51,9 @@ The objective of the Master thesis is to develop a new feature in the LLE enviro
   ),
   [mathematical base notation:],[],
   [$f:X times Y arrow Z$],[a function $f$ that has a domain of $X times Y$ and return value in $Z$],
-  [$Pr(s'|s,a)$], [the probability of transitioning to state $s'$ from state $s$ given action $a$],
+  [$Pr(x|y,z)$], [the probability of $x$ given $y$ and $z$],
+  [$Delta_X$], [the set of probability distributions over the set $X$],
+  [$x tilde X$], [a random variable $x$ that follows the distribution $X$],
 
   [Markov Decision Process:],[],
   [$s$,$s'$], [state],
@@ -81,7 +84,6 @@ The objective of the Master thesis is to develop a new feature in the LLE enviro
   [$a^i$], [the action of agent $i$],
   [$tau$], [a transition defined as $tau = angle.l s, cal(a), r, s' angle.r$],
 )
-
 // (temporary place) temporary place for some definition
 // - State Space $S$
 // - Agent i action space $A_i$
@@ -90,16 +92,14 @@ The objective of the Master thesis is to develop a new feature in the LLE enviro
 // - transition function $T$ 
 // - reward function $R$
 // the notation will be using the notation of ref to book #link("https://spinningup.openai.com/_/downloads/en/latest/pdf/")[here]
-
-(end temporary place)
 = State of the Art
-== Distributed artificial intelligence
+== Introduction
 // all the following section are from the article "Cooperative Multi-Agent Learning The State of the Art" by [ref to article]
 !!(this section has content form the article "Cooperative Multi-Agent Learning The State of the Art" by [ref to article])!!
 
 Distributed artificial intelligence (DAI) is the a field of study which is rising in the last two decades. which is mainly focused on the domain of distributed systems. A distributed system by the definition of @panait_cooperative_2005 is #quote("where a number of entities work together to cooperatively solve problems") . this kind of study is not new, it has been studied for a long time. But what is new is the rise of the internet and the multiple electronic devices that we have today. Which bring the need of a new field of study which is the DAI  that simply is the study of the interaction between multiple artificial intelligence (AI) or agents in a distributed system.
 === Multi-Agent Systems vs. Distributed problems Solving
-In the field of DAI, we can find two main subfields a more traditional one which is the Distributed Problem Solving (DPS) which us the paradigm of a divide and conquer. The DPS is a field which is focused on distributing the problem to independent slaves which are solving the problem independently. On the other hand, the Multi-Agent Systems (MAS) emphasizes on the interaction between the agents. 
+In the field of DAI, we can find two main subfields a more traditional one which is the Distributed Problem Solving (DPS) which us the paradigm of a divide and conquer. The DPS is a field which is focused on distributing the problem to independent slaves which are solving the problem independently. On the other hand, the Multi-Agent Systems (MAS) emphasizes on the interaction between the agents. But given the objective of multiple agents working together to solve a problem, the
 === Multi-Agent Systems
 In MAS there are few constraints that are imposed on the agents. such as even though the agents are working together to solve a problem in a same environment they are not able to share their knowledge of the envirement with each other they may only acces to the information that they have, in RL we often refer this as a local obsevation. This is a important point because if they were able to share their knowledge this would be able to simply syncronize their knowledge and solve this problem as a DPS problem if the problem need no interaction between the agents (#todo may be more ). 
 == Multi-Agent Learning
@@ -118,6 +118,8 @@ Supervised Learning (SL) is a subfield of Machine Learning (ML) which focuses on
 === Reinforcement Learning
 
 The domain of Reinforcement Learning (RL) is a subfield of Machine Learning (ML) which focuses on learning from the interaction between an agent and its environment. Compared to supervised learning, Learner (learning agent) is not provided with explicit information about the environment neither which action to perform. It mainly focuses on the idea of trial and error, by interacting with its environment the learner will be acquiring or losing points and will be his only source of feedback. Thus the agents will be trying to maximize the number of points given. @sutton_reinforcement_2014
+==== Agent 
+An agent 
 == Single Agent Reinforcement Learning
 === Markov Decision Process
 In a Single agent Reinforcement Learning (RL) the methodology used to model the environment is the Markov Decision Process (MDP)@puterman_markov_2009. The MDP is a mathematical framework that is used to model the interaction between an agent and its environment(#todo find the lost ref). It is often used to represent the decision-making process of an agent in a stochastic environment. The MDP is a powerful tool that allows us to model the environment in a way that is easy to understand and analyze.
@@ -145,6 +147,12 @@ A ways to represent the environment is to use a state. A state is an abstract wa
 
 #figure(image("images/state.png", width: 45%),
         caption: "A state in the game of tick-tac-toe")<state>
+
+=== Observation
+An observation is a partial description of a state. but instead of providing complete information of the environment, the observation provide only the information aquired by the agent. An observation is often used in the case where the agent does not have access to the complete information of the environment, such as in a partially observable environment POMDP(#todo("getref")). The observation is denoted as:
+- $O$ is the observation space
+- $o_t$ is the observation at a time $t$ in the observation space given that $o_t in O$
+A analogy to the observation is the case where you are in a room and you can only see what is in front of you, but you cannot see what is behind you. In this case, your observation is only the information that you can see in front of you, but not the complete information of the room.
 === Action 
 A action reffers to the possible movement doable by the agent in the environment. In the case of the game of tick-tac-toe, the possible actions is to put a mark in one of the available cell out the 9 cells, for exemple in the previous example @state the "O" player has the following possible action to choose from [top left, top center, middle right, bottom left, bottom center, bottom right]. In the mathematical notation we usually use the notation $a$ to represent an action (e.g. 'top left'), and $A$ to represent the action space (e.g list of all actions listed above). 
 - $A$ is the action space of the environment
@@ -161,6 +169,8 @@ and then the transition function $T$ is the function that is used to represent t
 they also posses certain properties such as:
 - the function $T$ : $S times A times S -> [0,1]$
 - $sum_(s' in S) T(s,a, s') = 1$
+alternatively we can also represent the transition function as a conditional probability function which is often used in the literature. In this case we can use the notation:
+- $T(s, a) : S times A -> Delta_S$ where $Delta_S$ is the set of probability distributions over the state space $S$.
 note that mathematically the transition function is a re-writing of the conditional probability function often represented as
 $$Pr(s'|s, a)$$ 
 === Reward
@@ -169,6 +179,11 @@ $$R(s, a, s')$$
 where $s$ is the initial state, $a$ is the action and $s'$ is the final state. 
 And mathematically the reward function is:
 - $R$ : $S times A times S -> bb(R)$
+
+=== Trajectory
+A Trajectory is a sequence of states, actions and rewards that the agent has taken in the environment. The Trajectory writen as $ (S_1, A_1, R_1, S_2, A_2, R_2, ...) $ where $S_1 tilde rho_0$, $S_(t+1) tilde T(S_t, A_t)$
+
+
 == Multi-Agent Reinforcement Learning
 === Stationary vs. Non-stationary
 Originaly we can say that multiple independent agents may not increase dramaticaly in complexity from the RL with single agant but proven
@@ -176,6 +191,7 @@ The MARL can be naively seen as adding more than one agent to the RL environment
 
 === Search space
 
+=== 
 = LLE Environment
 == Overview
 The Laser Learning Environment (LLE) is a 2D grid world with discrete times and multiple cooperative agents. The game is based on the original game of Oxen, where the goal of each agent is to reach an exit point while acquiring gems (bonus points). All agents are cooperating to reach they respective exit point while avoiding obstacles. The envirement is designed to be simple and esay to understand, while still being challenging enough to test the performance of MARL algorithms.
@@ -200,7 +216,8 @@ A transition is defined as $tau = angle.l s, cal(a), r, s' angle.r$ with $r in b
 Bases on the current state of the LLE environment, only a few algorithms where tested on the envirement @molinghen_laser_2024.
 
 === Value Decomposition Networks
-The Value Decomposition Networks (VDN) @sunehag_value-decomposition_2017 is a MARL algorithm that is 
+The Value Decomposition Networks (VDN) @sunehag_value-decomposition_2017 is a MARL algorithm that is leveraging the hypothesis of decomposing the joint action-value function into individual value functions for each agent, $ Q((h^1, h^2, ..., h^n), (a^1, a^2, ..., a^n)) approx sum_(i=1)^n tilde(Q)_i (h^i, a^i) $ #todo("need rework the formalism").
+
 
 = Objectives
 The objective of this thesis is to develop a new feature in the LLE environment which consists of adding an lift which allow agents to have more possibilities of action. with this new feature, we aim to evaluate the performance of previously trained MARL algorithms on the original environment and observe if potential bottlenecks arise from the addition of this new element. The lift is designed to be used in conjunction with the lever, which is used to activate the lift.
