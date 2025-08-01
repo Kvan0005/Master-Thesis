@@ -28,7 +28,7 @@ abstract: "#todo{Abstract}",
 = Introduction
 
 == Background and Objectives
-A Multi-Agent Reinforcement Learning (MARL) is a subfield of the Reinforcement Learning domain which focuses on the interaction between multiple agents in a shared environment. Through the recent years, an increasly amount of research has been conducted in this field to resolve issue that has arisen in the reel world @weiss_multiagent_2001 @stone_multiagent_1997. However, most of the research are done through simulations on environments which does not involve unknown elements in existing envirement. This thesis aims to evaluate the learning performance of MARL algorithms from a know environment with with proven working result, to an slightly modified modified envirement by adding an unknown elements. Under the suppervision of Prof. Tom Lenaerts, and advisor Yannick Molinghen, from the Machine Learning Group (MLG) of the Université Libre de Bruxelles (ULB).
+A Multi-Agent Reinforcement Learning (MARL) is a subfield of the Reinforcement Learning domain which focuses on the interaction between multiple agents in a shared environment. Through the recent years, an increasly amount of research has been conducted in this field to resolve issue that has arisen in the reel world @weiss_multiagent_2001 @stone_multiagent_1997. However, most of the research are done through simulations on environments which does not involve unknown elements in existing environment. This thesis aims to evaluate the learning performance of MARL algorithms from a know environment with with proven working result, to an slightly modified modified environment by adding an unknown elements. Under the suppervision of Prof. Tom Lenaerts, and advisor Yannick Molinghen, from the Machine Learning Group (MLG) of the Université Libre de Bruxelles (ULB).
 
 Currently, the research is focused on the the environment of #link("https://github.com/yamoling/lle")[LLE] (Laser Learning Reinforcement) which is a environment created by Yannick Molinghen based on the original game. The environment is a 2D world also known as grid world where a single or multiple agents will be interacting in a Cooperative manner. The goal of each individual agent is to reach an exit point while aquiring rewards (under the form of Gems) and avoiding obstacles.
 
@@ -101,7 +101,7 @@ Distributed artificial intelligence (DAI) is the a field of study which is risin
 === Multi-Agent Systems vs. Distributed problems Solving
 In the field of DAI, we can find two main subfields a more traditional one which is the Distributed Problem Solving (DPS) which us the paradigm of a divide and conquer. The DPS is a field which is focused on distributing the problem to independent slaves which are solving the problem independently. On the other hand, the Multi-Agent Systems (MAS) emphasizes on the interaction between the agents. But given the objective of multiple agents working together to solve a problem, the
 === Multi-Agent Systems
-In MAS there are few constraints that are imposed on the agents. such as even though the agents are working together to solve a problem in a same environment they are not able to share their knowledge of the envirement with each other they may only acces to the information that they have, in RL we often refer this as a local obsevation. This is a important point because if they were able to share their knowledge this would be able to simply syncronize their knowledge and solve this problem as a DPS problem if the problem need no interaction between the agents (#todo may be more ). 
+In MAS there are few constraints that are imposed on the agents. such as even though the agents are working together to solve a problem in a same environment they are not able to share their knowledge of the environment with each other they may only acces to the information that they have, in RL we often refer this as a local obsevation. This is a important point because if they were able to share their knowledge this would be able to simply syncronize their knowledge and solve this problem as a DPS problem if the problem need no interaction between the agents (#todo may be more ). 
 == Multi-Agent Learning
 The Multi-Agent Learning (MAL) 
 (todo):
@@ -119,7 +119,8 @@ Supervised Learning (SL) is a subfield of Machine Learning (ML) which focuses on
 
 The domain of Reinforcement Learning (RL) is a subfield of Machine Learning (ML) which focuses on learning from the interaction between an agent and its environment. Compared to supervised learning, Learner (learning agent) is not provided with explicit information about the environment neither which action to perform. It mainly focuses on the idea of trial and error, by interacting with its environment the learner will be acquiring or losing points and will be his only source of feedback. Thus the agents will be trying to maximize the number of points given. @sutton_reinforcement_2014
 ==== Agent 
-An agent 
+An agent in RL can be seen as a learner or decision maker that is equipped with a set of tool to observe and interact with its environment. the set of tools is can be split into two components:
+- the sensory component also known in the literature as the "sensor" which is used to percept the environment #todo("WIP")
 == Single Agent Reinforcement Learning
 === Markov Decision Process
 In a Single agent Reinforcement Learning (RL) the methodology used to model the environment is the Markov Decision Process (MDP)@puterman_markov_2009. The MDP is a mathematical framework that is used to model the interaction between an agent and its environment(#todo find the lost ref). It is often used to represent the decision-making process of an agent in a stochastic environment. The MDP is a powerful tool that allows us to model the environment in a way that is easy to understand and analyze.
@@ -178,11 +179,18 @@ The reward function, which takes a initial state, an action and a final state. U
 $$R(s, a, s')$$
 where $s$ is the initial state, $a$ is the action and $s'$ is the final state. 
 And mathematically the reward function is:
-- $R$ : $S times A times S -> bb(R)$
+$ R : S times A times S -> bb(R) $
 
 === Trajectory
-A Trajectory is a sequence of states, actions and rewards that the agent has taken in the environment. The Trajectory writen as $ (S_1, A_1, R_1, S_2, A_2, R_2, ...) $ where $S_1 tilde rho_0$, $S_(t+1) tilde T(S_t, A_t)$
+A Trajectory is a sequence of states, actions and rewards that the agent has taken in the environment. The Trajectory writen as $ (S_1, A_1, R_1, S_2, A_2, R_2, ...) $ where the initial state of the environment $S_1$ is randomly sampled from the start state distribution $rho_0$:
+$ S_1 tilde rho_0 $
+the state transition must follow the transition function $T$ and the action must be sampled from the action space $A$ at a given time $t$:
+$ S_(t+1) tilde T(S_(t), A_(t)) $
 
+=== History
+A history is a sequence of actions, observations and rewards that the agent has taken in the environment. The history is often used to represent the past actions and observations of the agent. The history is often represented as:
+$ h_t = (o_1, a_1, r_1, o_2, a_2, r_2, ..., o_(t-1), a_(t-1), r_(t-1)) $
+where $o_t$ is the observation, $a_t$ is the action and $r_t$ is the reward at time $t$. The main difference between a trajectory and a history is one is all information about the environment while the other is only the information gathered by a specific agent. An analogy to this is the escape room where the history is what the player has recalled from the past actions and observations, while the trajectory what the game master (who know all secrets information that the player dont know) has seen from the player actions in the escape room.
 
 == Multi-Agent Reinforcement Learning
 === Stationary vs. Non-stationary
@@ -194,10 +202,10 @@ The MARL can be naively seen as adding more than one agent to the RL environment
 === 
 = LLE Environment
 == Overview
-The Laser Learning Environment (LLE) is a 2D grid world with discrete times and multiple cooperative agents. The game is based on the original game of Oxen, where the goal of each agent is to reach an exit point while acquiring gems (bonus points). All agents are cooperating to reach they respective exit point while avoiding obstacles. The envirement is designed to be simple and esay to understand, while still being challenging enough to test the performance of MARL algorithms.
+The Laser Learning Environment (LLE) is a 2D grid world with discrete times and multiple cooperative agents. The game is based on the original game of Oxen, where the goal of each agent is to reach an exit point while acquiring gems (bonus points). All agents are cooperating to reach they respective exit point while avoiding obstacles. The environment is designed to be simple and esay to understand, while still being challenging enough to test the performance of MARL algorithms.
 
 == Enviroment challenges
-The envirement is aimed at testing the performance of MARL algorithms tailored for decentralized cooperative scenarios and possess some challenges that are not pressent in other envirement such as StarCraft Multi-Agent Challenge or SMAC @samvelyan_starcraft_2019 or the Hanabi environment @bard_hanabi_2020. Instead this envirement is designed to take into account other cooperating factors such as the perfect coordination, interdependence and the zero incentive dynamics@molinghen_laser_2024.
+The environment is aimed at testing the performance of MARL algorithms tailored for decentralized cooperative scenarios and possess some challenges that are not pressent in other environment such as StarCraft Multi-Agent Challenge or SMAC @samvelyan_starcraft_2019 or the Hanabi environment @bard_hanabi_2020. Instead this environment is designed to take into account other cooperating factors such as the perfect coordination, interdependence and the zero incentive dynamics@molinghen_laser_2024.
 
 == multiagent Markov Decision Process
 The model of the environment is based on the multiagent Markov decision process (MMDPs)@boutilier_planning_nodate is a generalization of the Markov decision process (MDP) to multiple agents. The MMDP is a tuple $angle.l n, S, cal(A), cal(T), cal(R), s_0, s_f angle.r$ 
@@ -213,7 +221,7 @@ where:
 A transition is defined as $tau = angle.l s, cal(a), r, s' angle.r$ with $r in bb(R)$
 
 == Algorithm 
-Bases on the current state of the LLE environment, only a few algorithms where tested on the envirement @molinghen_laser_2024.
+Bases on the current state of the LLE environment, only a few algorithms where tested on the environment @molinghen_laser_2024.
 
 === Value Decomposition Networks
 The Value Decomposition Networks (VDN) @sunehag_value-decomposition_2017 is a MARL algorithm that is leveraging the hypothesis of decomposing the joint action-value function into individual value functions for each agent, $ Q((h^1, h^2, ..., h^n), (a^1, a^2, ..., a^n)) approx sum_(i=1)^n tilde(Q)_i (h^i, a^i) $ #todo("need rework the formalism").
