@@ -1,0 +1,58 @@
+show-today: false
+# Either month or day
+viewport-snap: day
+# Can include `year`, `month`, `week`, or `day`
+headers:
+  - year
+  - month
+# A start date. Not required.
+start: 2025-10-01
+# An end date. Not required.
+end: 2026-05-31
+# Master tesis planing
+taskgroups:
+  - name: Prepare the LLE environment
+    tasks:
+      - name: implement lift/lever mechanism
+        start: 2025-10-15
+        end: 2025-11-15
+      - name: implement layer mechanism¹
+        start: 2025-11-01
+        end: 2025-12-31
+      - name: training the agents
+        start: 2025-11-25
+        end: 2026-01-31
+  - name: experiments
+    tasks:
+      - name: Gather data
+        start: 2026-01-01
+        end: 2026-02-28
+      - name: Analyze data
+        start: 2026-02-01
+        end: 2026-03-15
+
+
+  - name: Writing
+    tasks:
+      - name: Rewrite the introduction 
+        start: 2025-10-15
+        end: 2025-11-30
+      - name: Write methodology
+        start: 2025-12-01
+        end: 2026-01-31
+      - name: Write Observations and Results
+        start: 2026-01-15
+        end: 2026-04-15
+      - name : clean up all sections
+        start: 2026-04-01
+        end: 2026-05-15
+
+
+      
+milestones:
+  - name: Code ready for experiments
+    date: 2026-01-31
+  - name: First draft of the thesis
+    date: 2026-03-15
+  - name: Final work
+    date: 2026-05-15
