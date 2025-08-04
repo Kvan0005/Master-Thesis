@@ -22,7 +22,9 @@
       status: "Supervisor",
     )
   ),
-logo: "ulb_logo.jpg"
+logo: "ulb_logo.jpg",
+abstract: "In recent years, artificial intelligence (AI) and machine learning (ML) systems have demonstrated remarkable capabilities in structured environments. However, their performance often degrades in the presence of unforeseen elements or domain shifts. One pertinent challenge is evaluating how the robustness and performance of a given algorithm—particularly those used in autonomous systems—change when the environment is perturbed by the introduction of unknown or novel elements. This research is situated within the broader field of AI robustness and domain generalization, with applications of intelligent decision-making systems.
+"
 )
 
 = Introduction
@@ -33,6 +35,8 @@ Multi-Agent Reinforcement Learning (MARL) is a subfield of the Reinforcement Lea
 Currently, the research is focused on the environment of #link("https://github.com/yamoling/lle")[LLE] (Laser Learning Reinforcement), which is an environment created by Yannick Molinghen based on the original game. The environment is a 2D world, also known as a grid world, where one or more agents interact in a cooperative manner. The goal of each individual agent is to reach an exit point while acquiring rewards (in the form of gems) and avoiding obstacles.
 
 The objective of the Master's thesis is to develop a new feature in the LLE environment that was also included in the original game Oxen. Moreover, this feature has another objective: to add a new element to the environment that is not included in the agents learning process. This allows for the re-evaluation of the performance of already fine-tuned algorithms trained on the original environment and the observation of any possible bottlenecks that may arise from the addition of these new elements.
+While many AI algorithms perform well under training conditions, their ability to adapt to unfamiliar scenarios is limited. The central problem addressed in this thesis is:
+
 == Notations and Definitions
 === Notations
 #show table.cell.where(y: 0): strong
@@ -313,28 +317,48 @@ The model of the environment is based on the Multi-Agent Markov Decision Process
 A transition is defined as $tau = angle.l s, cal(a), r, s' angle.r$ with $r in bb(R)$.
 
 == Algorithm
-The algorithm used in the LLE environment is based on the CTDE approach mentioned previously. Based on the current state of the LLE environment, only a few algorithms have been tested @molinghen_laser_2024.
-The approach used is to use a centralized training phase where all agents a evaluated by a centralized critic, which allowed the agents to 
+Based on the MMDP model, the LLE environment is designed to be used with MARL algorithms that follow the Centralized Training with Decentralized Execution (CTDE) paradigm. The environment is compatible with various MARL algorithms, including Value Decomposition Networks (VDN) and Q-Mix. There are also implementations of Independent Q-Learning (IQL) which can be used for comparison purposes.
 
 === Value Decomposition Networks
 Value Decomposition Networks (VDN) @sunehag_value-decomposition_2017 is a MARL algorithm that leverages the hypothesis of decomposing the joint action-value function into individual value functions for each agent:
 $ Q((h^1, h^2, ..., h^n), (a^1, a^2, ..., a^n)) approx sum_(i=1)^n tilde(Q)_i (h^i, a^i) $ 
 where $tilde(Q)_i$ is the value function of agent $i$, and $h^i$ is the history of agent $i$. This methodology allows agents to learn independently through $tilde(Q)$ while still producing a global result for the group $Q$.
 === independent Q-learning
-Independent Q-learning (IQL) ...
+#todo("ask yannick about this")
 === QMix
 ...
-== others ?
+
 = Objectives
 == Research Questions
-The main research question of this thesis is to evaluate the performance of MARL algorithms by comparing their performance using the original environment evaluation criteria. Additional questions include:
+The main research question of this thesis is
+- How does the performance of a given algorithm change when unknown elements are introduced into the environment
+  - What metrics can effectively quantify the algorithm robustness to novel elements ? 
+  - Can existing adaptation mechanisms mitigate the impact of unknown elements on algorithm performance ? 
+
+Additional questions include:
 - How does the introduction of previously unseen environmental elements affect the convergence speed of Multi-Agent Reinforcement Learning (MARL) algorithms that use the CTDE method in cooperative tasks?
 - Can pre-trained policies adapt without retraining when facing unseen elements?
 - Can MARL policies trained in a fully known environment generalize to environments with partially unknown dynamics without retraining?
 - Does incorporating a lift/lever mechanism as an unknown dynamic element lead to measurable differences in agent behavior compared to the baseline LLE environment?
 - Can agents adapt to unknown elements faster if the algorithm employs centralized training with decentralized execution (CTDE) versus fully independent learning?
 
-== Lift and Lever
+== Evaluation method
+The evaluation method will separated into x parts:
+=== Same model, different environment
+The first part of the evaluation will consist of evaluating the performance of the algorithms on map of similar difficulty as the original LLE map, but with the addition of the lift and lever. The goal is to observe how the algorithms perform in this new environment and whether they can adapt to the new element.
+
+For this part, the need to get map with equivalent difficulty as the original LLE map is important. The complexity of the map will be determined by the zero-incentive, interdependence, and perfect coordination factors. Given that these factors are not numerically defined, the equivalent difficulty may be subject to subjectivity. Another approach for comparison is to use the number of steps required to reach the goal.
+
+=== Best model performance
+The second part of the evaluation will consist of evaluating the performance of the best algorithm trained on the modified environment and comparing it to the performance of the best algorithm trained on the original environment. The goal is to observe whether the addition of the lift and lever has a significant impact on the performance of the
+
+In the same aspect this evaluation will also consider the training process of the algorithms, including the impact on the convergence speed and the number of training episodes required to reach a certain level of performance. 
+=== Evaluation Metrics
+The evaluation metrics will be based on the reward obtained by the team of agents in the environment. The reward is a scalar value that represents the number of gems collected by the agents and the rate of success in reaching the exit point. The reward is calculated as follows:
+- The reward is the sum of the number of gems collected by the agents.
+- The reward is the number of agents that reached the exit point.
+
+== Implementation requirements
 The objective of this thesis is to develop a new feature in the LLE environment that consists of adding a lift, which allows agents to have more possible actions. With this new feature, the aim is to evaluate the performance of previously trained MARL algorithms on the original environment and observe whether potential bottlenecks arise from the addition of this element. The lift is designed to be used in conjunction with the lever, which activates the lift.
 
 === Lift
@@ -342,11 +366,10 @@ The lift is a terrain type that allows agents to reach higher levels in the envi
 
 === Lever
 The lever is a terrain type that agents can interact with when standing on it. The lever activates the lift, allowing agents on the lift to switch floors. It is intended to work in conjunction with the lift, enabling agents to reach new areas of the environment.
+== Other possiblilities
+=== Proximity channel
+A instresting feature that could be added to the LLE environment is a proximity channel. This channel would allow agents to communicate with each other when they are close enough, enabling them to share information in some limited way. 
 
-=== Plane Extension
-The plane extension is the addition of a new dimension that allows the lift to move vertically...
-== Evaluation
-...
 = Time Plan
 #gantt(yaml("gantt.yaml"))
 
