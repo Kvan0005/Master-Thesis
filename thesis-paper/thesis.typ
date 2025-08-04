@@ -291,7 +291,7 @@ In MARL, this problem is particularly pronounced because rewards are often share
 
 
 === Current Approaches
-The current approaches to solving the challenges of credit assignment and non-stationarity in MARL is to use the Centralized Training with Decentralized Execution (CTDE) paradigm @dmap_2020_icaps_factored_2020 this approach allows agents to learn in a centralized manner during training while executing their policies independently during inference or real world deployment. This methode has been shown to be effective in various MARL environments, such as @sutton_reinforcement_2014, @schaul_prioritized_2016
+The current approaches to solving the challenges of credit assignment and non-stationarity in MARL is to use the Centralized Training with Decentralized Execution (CTDE) paradigm @dmap_2020_icaps_factored_2020 this approach allows agents to learn in a centralized manner during training while executing their policies independently during inference or real world deployment. This methode has been shown to be effective in various MARL environments @sutton_reinforcement_2014, @schaul_prioritized_2016.
 
 = LLE Environment
 == Overview
