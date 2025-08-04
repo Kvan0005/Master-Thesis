@@ -79,14 +79,14 @@ The objective of the Master's thesis is to develop a new feature in the LLE envi
   // [$R(s,a,s')$], [the reward function from state $s$ to state $s'$ given action $a$],
   //! [$R(s,a)$], [the reward function from state $s$ given action $a$],
   // [$rho_0$], [the initial state distribution],
-  //? [$pi$], [policy (decision-making rule)],
-  //? [$pi(s)$], [action choose by the policy $pi$ in state $s$],
+  // [$pi$], [policy (decision-making rule)],
+  // [$pi(s)$], [action choose by the policy $pi$ in state $s$],
   
-  //? [$Q(s,a)$], [the action-value function of state $s$ and action $a$],
-  //? [$V(s)$], [the value function of state $s$],
+  // [$Q(s,a)$], [the action-value function of state $s$ and action $a$],
+  // [$V(s)$], [the value function of state $s$],
   //? [$V^*(s)$], [the optimal value function of state $s$],
   //? [$Q^*(s,a)$], [the optimal action-value function of state $s$ and action $a$],
-  //? [$gamma$], [the discount factor],
+  // [$gamma$], [the discount factor],
   //? [$alpha$], [the learning rate],
 
   // [Multi-Agent Markov Decision Process:], [],
@@ -278,18 +278,27 @@ Non-stationarity is one of the main challenges in MARL because multiple agents p
 Based on this, two main research trends have emerged in the MARL field:
 - The first, known as concurrent learning, is where agents learn independently from each other. However, this approach does not solve the non-stationarity problem #todo("add depth here").
 
+- The second, known as team learning, is where agents learn together as a team. This approach aims to mitigate the non-stationarity problem by allowing agents to act as a single entity while in the training phase. But other challenges arise, such as the search space explosion. or the credit assignment problem.
 === Search Space
-As the number of agents increases, the number of possible joint actions grows exponentially. This leads to a combinatorial explosion in the search space, making it computationally impossible to find the optimal joint action within a reasonable time.
+By using method such as team learning, the agents can be seen as a single entity. However, this leads to a combinatorial explosion in the search space . Let take the joint action space, given that is the cartesian product of the individual action spaces. if grid world of a certain number of cells and 2 agents, each with 4 possible actions (up, down, left, right). The joint action space would be $A^1 times A^2 = 4 times 4 = 16$ possible joint actions and by adding a third agent, would be $64$ possible joint actions. By applying this geometric growth, and giving that we have $n$ agents, each with $m$ possible actions, the joint action space is given by
+$cal(A) = m^n$ 
+thus this model is not possible but not practical to use in real-world scenarios. This is known as the curse of dimensionality.
+
+=== Credit Assignment Problem
+The credit assignment problem is a challenge that arises in MARL when trying to determine which agent is responsible for a specific outcome. In a cooperative environment, agents must work together to achieve a common goal, but it can be difficult to determine which agent's actions contributed to the success or failure of the team. For example, consider a soccer game where the team wins; it is difficult to determine which player is responsible for the victory. The group of players is graded as a whole, but it is not clear which player contributed most and which player slacked off.
+
+In MARL, this problem is particularly pronounced because rewards are often shared among agents, making it hard to assign credit to individual actions. This ambiguity can hinder learning efficiency, as agents may not receive appropriate feedback for their contributions. Various approaches have been proposed to address the credit assignment problem, such as difference rewards, value decomposition, and counterfactual reasoning. These methods aim to provide more informative feedback to each agent, enabling them to better understand the impact of their actions on the overall outcome and improve cooperative behavior.
+
 
 === Current Approaches
-The current approaches to solving these challenges include...
+The current approaches to solving the challenges of credit assignment and non-stationarity in MARL is to use the Centralized Training with Decentralized Execution (CTDE) paradigm @dmap_2020_icaps_factored_2020 this approach allows agents to learn in a centralized manner during training while executing their policies independently during inference or real world deployment. This methode has been shown to be effective in various MARL environments, such as @sutton_reinforcement_2014, @schaul_prioritized_2016
 
 = LLE Environment
 == Overview
 The Laser Learning Environment (LLE) is a 2D grid world with discrete time steps and multiple cooperative agents. The game is based on the original game Oxen, where the goal of each agent is to reach an exit point while acquiring gems (bonus points). All agents cooperate to reach their respective exit points while avoiding obstacles. The environment is designed to be simple and easy to understand while still being challenging enough to test the performance of MARL algorithms.
 
 == Environment Challenges
-The environment is aimed at testing the performance of MARL algorithms tailored for decentralized cooperative scenarios and includes challenges not present in other environments such as the StarCraft Multi-Agent Challenge (SMAC) @samvelyan_starcraft_2019 or the Hanabi environment @bard_hanabi_2020. Instead, this environment is designed to incorporate factors such as perfect coordination, interdependence, and zero-incentive dynamics @molinghen_laser_2024.
+The environment is aimed at testing the performance of MARL algorithms tailored for decentralized cooperative scenarios and includes challenges not present in other environments such as the StarCraft Multi-Agent Challenge (SMAC) @samvelyan_starcraft_2019 or the Hanabi environment @bard_hanabi_2020. Instead, this environment is designed to incorporate factors such as perfect coordination, interdependence, and zero-incentive dynamics @molinghen_laser_2024#todo("maybe add subsec for the 3 factors").
 
 == Multi-Agent Markov Decision Process
 The model of the environment is based on the Multi-Agent Markov Decision Process (MMDP) @boutilier_planning_nodate, a generalization of the Markov Decision Process (MDP) to multiple agents. The MMDP is a tuple $angle.l n, S, cal(A), cal(T), cal(R), s_0, s_f angle.r$ where:
@@ -305,13 +314,14 @@ A transition is defined as $tau = angle.l s, cal(a), r, s' angle.r$ with $r in b
 
 == Algorithm
 The algorithm used in the LLE environment is based on the CTDE approach mentioned previously. Based on the current state of the LLE environment, only a few algorithms have been tested @molinghen_laser_2024.
+The approach used is to use a centralized training phase where all agents a evaluated by a centralized critic, which allowed the agents to 
 
 === Value Decomposition Networks
 Value Decomposition Networks (VDN) @sunehag_value-decomposition_2017 is a MARL algorithm that leverages the hypothesis of decomposing the joint action-value function into individual value functions for each agent:
 $ Q((h^1, h^2, ..., h^n), (a^1, a^2, ..., a^n)) approx sum_(i=1)^n tilde(Q)_i (h^i, a^i) $ 
 where $tilde(Q)_i$ is the value function of agent $i$, and $h^i$ is the history of agent $i$. This methodology allows agents to learn independently through $tilde(Q)$ while still producing a global result for the group $Q$.
 === independent Q-learning
-...
+Independent Q-learning (IQL) ...
 === QMix
 ...
 == others ?
