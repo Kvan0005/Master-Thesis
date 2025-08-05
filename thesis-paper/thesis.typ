@@ -23,87 +23,21 @@
     )
   ),
 logo: "ulb_logo.jpg",
-abstract: "In recent years, artificial intelligence (AI) and machine learning (ML) systems have demonstrated remarkable capabilities in structured environments. However, their performance often degrades in the presence of unforeseen elements or domain shifts. One pertinent challenge is evaluating how the robustness and performance of a given algorithm—particularly those used in autonomous systems—change when the environment is perturbed by the introduction of unknown or novel elements. This research is situated within the broader field of AI robustness and domain generalization, with applications of intelligent decision-making systems.
+abstract: "In recent years, artificial intelligence (AI) and machine learning (ML) systems have demonstrated remarkable capabilities in real world applications. However, their performance often degrades in the presence of untrained elements or domain shifts. One pertinent challenge is evaluating how the robustness and performance of a given algorithm—particularly those used in autonomous systems—change when the environment is perturbed by the introduction of unknown or novel elements. This research is situated within the broader field of AI robustness and domain generalization, with applications of intelligent decision-making systems.
 "
 )
 
 = Introduction
 
 == Background and Objectives
-Multi-Agent Reinforcement Learning (MARL) is a subfield of the Reinforcement Learning domain that focuses on the interaction between multiple agents in a shared environment. In recent years, an increasing amount of research has been conducted in this field to resolve issues that have arisen in the real world @weiss_multiagent_2001 @stone_multiagent_1997. However, most of the research has been done through simulations in environments that do not involve unknown elements in existing settings. This thesis aims to evaluate the learning performance of MARL algorithms when moving from a known environment with proven working results to a slightly modified environment by adding unknown elements. This work is carried out under the supervision of Prof. Tom Lenaerts and advisor Yannick Molinghen from the Machine Learning Group (MLG) of the Université Libre de Bruxelles (ULB).
+Multi-Agent Reinforcement Learning (MARL) is a subfield of the Reinforcement Learning domain that focuses on the interaction between multiple agents in a shared environment. In recent years, an increasing amount of research has been conducted in this field to resolve issues that have arisen in the real world @weiss_multiagent_2001 @stone_multiagent_1997. However, most of the research has been done through simulations in environments that do not involve element that has not been added in the training settings. This thesis aims to evaluate the learning performance of MARL algorithms when moving from a known environment with proven working results to a slightly modified environment by adding unknown elements.
 
-Currently, the research is focused on the environment of #link("https://github.com/yamoling/lle")[LLE] (Laser Learning Reinforcement), which is an environment created by Yannick Molinghen based on the original game. The environment is a 2D world, also known as a grid world, where one or more agents interact in a cooperative manner. The goal of each individual agent is to reach an exit point while acquiring rewards (in the form of gems) and avoiding obstacles.
+Currently, the research is focused on the environment of #link("https://github.com/yamoling/lle")[LLE] (Laser Learning Reinforcement) @molinghen_laser_2024, which is an environment created based on the original game. The environment is a 2D world, also known as a grid world, where one or more agents interact in a cooperative manner. The goal of each individual agent is to reach an exit point while acquiring rewards (in the form of gems) and avoiding obstacles.
 
 The objective of the Master's thesis is to develop a new feature in the LLE environment that was also included in the original game Oxen. Moreover, this feature has another objective: to add a new element to the environment that is not included in the agents learning process. This allows for the re-evaluation of the performance of already fine-tuned algorithms trained on the original environment and the observation of any possible bottlenecks that may arise from the addition of these new elements.
-While many AI algorithms perform well under training conditions, their ability to adapt to unfamiliar scenarios is limited. The central problem addressed in this thesis is:
-
-== Notations and Definitions
-=== Notations
-#show table.cell.where(y: 0): strong
-#set table(
-  stroke: (x, y) => if y == 0 {
-    (bottom:black)
-  },
-)
-#table(
-  columns: 2,
-  table.header(
-    [Notations],
-    [Description],
-  ),
-  [$approx$], [approximately equal],
-  [$in$], [is an element of (e.g., $3.2 in bb(R)$)],  
-  [$[a,b)$], [the interval from $a$ to $b$, where $a$ is included and $b$ is excluded],
-  [$sum_(a in A) a$], [the sum of all elements $a$ in the set $A$],
-  [$f:X times Y arrow Z$], [a function $f$ with a domain from the set $X times Y$ and an image set $Z$],
-  [$Pr(x|y,z)$], [the probability of $x$ given $y$ and $z$],
-  [$x tilde X$], [a random variable $x$ that follows the distribution $X$],
-  [$bb(N)$], [the set of natural numbers],
-  [$bb(R)$], [the set of real numbers],
-  [$Delta_X$], [the set of probability distributions over the set $X$],
-  [$t$], [a time step that belongs to the set of natural numbers $t in bb(N)$],
-  [$EE$], [the expected value],
-  [$gamma$], [the discount factor, which is a real number in the interval $[0,1]$],
+While many Artificial Intelligence (AI) algorithms perform well under training conditions, their ability to adapt to unfamiliar scenarios is limited.
 
 
-  // [Markov Decision Process:],[],
-  // [$s$,$s'$], [state],
-  // [$a$],[an action],
-  // [$r$],[a reward],
-  // [$S$], [the state space],
-  // [$A$], [the action space],
-  // [$A(s)$], [the action space available in state $s$],
-  // [$t$], [discrete time step],
-  // [$s_t$], [the state at time $t$],
-  // [$a_t$], [the action at time $t$],
-  // [$r_t$], [the reward at time $t$],
-  // [$A(s)$], [the action space available in state $s$],
-  //! [$T(s,a,s')$], [the transition function from state $s$ to state $s'$ given action $a$],
-  // [$T(s,a)$], [the transition function from state $s$ given action $a$],
-  // [$R(s,a,s')$], [the reward function from state $s$ to state $s'$ given action $a$],
-  //! [$R(s,a)$], [the reward function from state $s$ given action $a$],
-  // [$rho_0$], [the initial state distribution],
-  // [$pi$], [policy (decision-making rule)],
-  // [$pi(s)$], [action choose by the policy $pi$ in state $s$],
-  
-  // [$Q(s,a)$], [the action-value function of state $s$ and action $a$],
-  // [$V(s)$], [the value function of state $s$],
-  //? [$V^*(s)$], [the optimal value function of state $s$],
-  //? [$Q^*(s,a)$], [the optimal action-value function of state $s$ and action $a$],
-  // [$gamma$], [the discount factor],
-  //? [$alpha$], [the learning rate],
-
-  // [Multi-Agent Markov Decision Process:], [],
-  // [$cal(A)$], [the joint action space],
-  // [$cal(a)$], [the joint action],
-  // [$cal(T)(s,cal(a),s')$], [the transition function from state $s$ to state $s'$ given joint action $cal(a)$],
-  // [$cal(T)(s,cal(a))$], [the transition function from state $s$ given joint action $cal(a)$],
-  // [$cal(R)(s,cal(a),s')$], [the reward function from state $s$ to state $s'$ given joint action $cal(a)$],
-  // [$cal(R)(s,cal(a))$], [the reward function from state $s$ given joint action $cal(a)$],
-  // [$A^i$], [the action space of agent $i$],
-  // [$a^i$], [the action of agent $i$],
-  // [$tau$], [a transition defined as $tau = angle.l s, cal(a), r, s' angle.r$],
-)
 // (temporary place) temporary place for some definition
 // - State Space $S$
 // - Agent i action space $A_i$
@@ -225,35 +159,38 @@ $ r_t = R(s_(t+1) | a_t, s_(t)) $
 
 === Return
 Unlike the reward, which is a scalar value given at a specific time, the return is the cumulative reward observed over a period of time. It can be either finite or infinite. In the finite case, the return is also called the #strong("finite-horizon undiscounted return") and is often represented as:
-$R("trajectory placeholder") = sum_(t=0)^(T-1) r_t$ #todo("need better notation due to conflict with the reward and multi-agent notation")
+$ R("trajectory placeholder") = sum_(t=0)^(T-1) r_t $ #todo("need better notation due to conflict with the reward and multi-agent notation")
 where $T$ is the time horizon and $tau$ is the trajectory of the agent.
 
-In the infinite case, the discount factor $gamma$ must be taken into account to avoid an unbounded return (#todo("do infinite case")).
+In the infinite case, the discount factor $gamma$ must be taken into account to avoid an unbounded, the infinite-horizon discounted return is often represented as:
+$ R("trajectory placeholder") = sum_(t=0)^(infinity) gamma^t r_t $
+
+The return is often a better measure for evaluating the performance of certain trajectory and by adding the discount factor $gamma$, it allows the agent to put more importance on recent rewards over distance rewards. And given that $gamma$ is a parameter in the interval $[0,1]$, it can be used to control the importance of future rewards. A value of $gamma = 0$ means that only the immediate reward is considered, while a value of $gamma = 1$ means that all future rewards are considered equally important.
 
 === Trajectory
 A trajectory is a sequence of states, actions, and rewards that the agent experiences in the environment. The trajectory is written as
-$"trajectory placeholder" = (S_1, A_1, R_1, S_2, A_2, R_2, ...)$
-where the initial state of the environment $S_1$ is randomly sampled from the start state distribution $rho_0$:
-$S_1 tilde rho_0$
-
-The state transitions must follow the transition function $T$, and the actions must be sampled from the action space $A$ at a given time $t$:
+$ "trajectory placeholder" = (S_1, A_1, R_1, S_2, A_2, R_2, ...) $
+where the initial state of the environment $S_1$ is randomly sampled from the start state distribution $rho_0:S_1 tilde rho_0$. The state transitions must follow the transition function $T$, and the actions must be sampled from the action space $A$ at a given time $t$:
 $S_(t+1) tilde T(dot | S_(t), A_(t))$
 
 === History
 A history is a sequence of actions, observations, and rewards that the agent experiences in the environment. It is often used to represent the past actions and observations of the agent. The history is commonly written as:
-$h_t = (o_1, a_1, r_1, o_2, a_2, r_2, ..., o_(t-1), a_(t-1), r_(t-1))$
+$ h_t = (o_1, a_1, r_1, o_2, a_2, r_2, ..., o_(t-1), a_(t-1), r_(t-1)) $
 where $o_t$ is the observation, $a_t$ is the action, and $r_t$ is the reward at time $t$.
 
 The main difference between a trajectory and a history is that a trajectory contains all information about the environment, while a history contains only the information gathered by a specific agent. An analogy is an escape room: the history is what the player recalls from past actions and observations, while the trajectory is what the game master (who knows all the secret information that the player does not know) sees of the player's actions in the escape room.
 
 === Policy
-A policy can be seen as the decision-making rule of the agent, where for any given state it recommends the actions to take. The policy is often represented as:
-$ pi : S -> Delta_A $
-where $pi$ is the policy, $S$ is the state space, and $Delta_A$ is the set of probability distributions over the action space $A$.
+A policy can be seen as the decision-making rule of the agent, where for any given state it has a mapping to a set of probabilities over the possible actions. The policy is often represented as:
+$ pi_theta : S -> Delta_A $
+where $pi$ is the policy, $theta$ is the parameter of the policy, $S$ is the state space, and $Delta_A$ is the set of probability distributions over the action space $A$. thus maze solving agent that follows a policy $pi$ (e.g. always taking same turn) with $theta$ (e.g. prefer left ) will be aswering "LEFT" to 
+the question "What is the next action to take in state $s$?"
 
+A policy parameter $theta$ is the set of parameters that is used in the policy to determine the action probabilities. These parameters are typically learned from data through a training process.
+ 
 ==== Optimal Policy
-#todo("finish the optimal policy definition")
-The optimal policy is the policy that maximizes the expected return of the agent. It is often represented as:
+The optimal policy is the policy that maximizes the expected return (or value) of the agent. It is often represented as:
+$ pi^* = "argmax"_(pi) EE[R("trajectory placeholder") | pi] $
 
 === Action-Utility Function
 #todo("double check the action-utility function definition")
@@ -301,19 +238,38 @@ The current approaches to solving the challenges of credit assignment and non-st
 == Overview
 The Laser Learning Environment (LLE) is a 2D grid world with discrete time steps and multiple cooperative agents. The game is based on the original game Oxen, where the goal of each agent is to reach an exit point while acquiring gems (bonus points). All agents cooperate to reach their respective exit points while avoiding obstacles. The environment is designed to be simple and easy to understand while still being challenging enough to test the performance of MARL algorithms.
 
+== Environment Features
+=== State
+The LLE state is composed of a two dimensional grid of cells, where each cell can be either a wall, a gem, a laser beam, laser source, or an exit point. On top of that, a cell can also be occupied by an agent, there is also collision between agent thus each cell is only occupied by one agent at a time. each agent has a unique color and it will also have a exit point of the same color.
+==== Empty Cell
+An empty cell is the default cell type in the environment. It is a crossable and occupiable cell that does not contain any obstacles or rewards, neither interactible.
+
+==== Wall
+The wall is a cell that cannot be crossed by agents. It is used to create obstacles in the environment and to define the boundaries of the grid world#todo("double check if boundary is wall or not"). A wall is not a valid state for an agent to occupy, and is not interactable by agents.
+
+==== Gem 
+The gem is a ephermeral cell that will be collected by the agent when it occupies the cell. The gem is used to reward the team of agents for their cooperation and to encourage them to explore/guide them through the environment. After being collected the cell will became an empty cell.
+
+==== Laser Beam
+The laser beam is a dynamic cell that can be activated by a laser source ...
+
+== Implementation
+...
+
+
 == Environment Challenges
 The environment is aimed at testing the performance of MARL algorithms tailored for decentralized cooperative scenarios and includes challenges not present in other environments such as the StarCraft Multi-Agent Challenge (SMAC) @samvelyan_starcraft_2019 or the Hanabi environment @bard_hanabi_2020. Instead, this environment is designed to incorporate factors such as perfect coordination, interdependence, and zero-incentive dynamics @molinghen_laser_2024#todo("maybe add subsec for the 3 factors").
 
 == Multi-Agent Markov Decision Process
 The model of the environment is based on the Multi-Agent Markov Decision Process (MMDP) @boutilier_planning_nodate, a generalization of the Markov Decision Process (MDP) to multiple agents. The MMDP is a tuple $angle.l n, S, cal(A), cal(T), cal(R), s_0, s_f angle.r$ where:
--$n$ is the number of agents
--$S$ is the set of states
--$cal(A) equiv A^1 times A^2 times ... times A^n$ is the joint action space, and $A^i$ is the set of actions available to agent $i$ #footnote[$A^i$ was modified from the original notation $A_i$ to avoid confusion with the action space at a given time $t$])
--$cal(a) equiv (a^1, a^2, ..., a^n) in cal(A)$ is the joint action of all agents, where $a^i$ is an action of agent $i$
--$cal(T): S times cal(A) arrow Delta_S$ is a function that gives the probability of transitioning from state $s$ to state $s'$ given a joint action $cal(a)$
--$cal(R): S times cal(A) times S arrow bb(R)$ is the function that returns the reward obtained when transitioning from state $s$ to state $s'$ given a joint action $cal(a)$
--$s_0 in S$ is the initial state
--$s_f in S$ is the final state
+- $n$ is the number of agents
+- $S$ is the set of states
+- $cal(A) equiv A^1 times A^2 times ... times A^n$ is the joint action space, and $A^i$ is the set of actions available to agent $i$ #footnote[$A^i$ was modified from the original notation $A_i$ to avoid confusion with the action space at a given time $t$])
+- $cal(a) equiv (a^1, a^2, ..., a^n) in cal(A)$ is the joint action of all agents, where $a^i$ is an action of agent $i$
+- $cal(T): S times cal(A) arrow Delta_S$ is a function that gives the probability of transitioning from state $s$ to state $s'$ given a joint action $cal(a)$
+- $cal(R): S times cal(A) times S arrow bb(R)$ is the function that returns the reward obtained when transitioning from state $s$ to state $s'$ given a joint action $cal(a)$
+- $s_0 in S$ is the initial state
+- $s_f in S$ is the final state
 A transition is defined as $tau = angle.l s, cal(a), r, s' angle.r$ with $r in bb(R)$.
 
 == Algorithm
@@ -374,3 +330,102 @@ A instresting feature that could be added to the LLE environment is a proximity 
 #gantt(yaml("gantt.yaml"))
 
 #bibliography("bibliography.bib")
+
+= Appendix
+== Notations
+#show table.cell.where(y: 0): strong
+#set table(
+  stroke: (x, y) => if y == 0 {
+    (bottom:black)
+  },
+)
+#table(
+  columns: 2,
+  table.header(
+    [Notations],
+    [Description],
+  ),
+  [$approx$], [approximately equal],
+  [$in$], [is an element of (e.g., $3.2 in bb(R)$)],  
+  [$[a,b)$], [the interval from $a$ to $b$, where $a$ is included and $b$ is excluded],
+  [$sum_(a in A) a$], [the sum of all elements $a$ in the set $A$],
+  [$f:X times Y arrow Z$], [a function $f$ with a domain from the set $X times Y$ and an image set $Z$],
+  [$Pr(x|y,z)$], [the probability of $x$ given $y$ and $z$],
+  [$x tilde X$], [a random variable $x$ that follows the distribution $X$],
+  [$bb(N)$], [the set of natural numbers],
+  [$bb(R)$], [the set of real numbers],
+  [$Delta_X$], [the set of probability distributions over the set $X$],
+  [$t$], [a time step that belongs to the set of natural numbers $t in bb(N)$],
+  [$EE$], [the expected value],
+  [$gamma$], [the discount factor, which is a real number in the interval $[0,1]$],
+
+
+  // [Markov Decision Process:],[],
+  // [$s$,$s'$], [state],
+  // [$a$],[an action],
+  // [$r$],[a reward],
+  // [$S$], [the state space],
+  // [$A$], [the action space],
+  // [$A(s)$], [the action space available in state $s$],
+  // [$t$], [discrete time step],
+  // [$s_t$], [the state at time $t$],
+  // [$a_t$], [the action at time $t$],
+  // [$r_t$], [the reward at time $t$],
+  // [$A(s)$], [the action space available in state $s$],
+  //! [$T(s,a,s')$], [the transition function from state $s$ to state $s'$ given action $a$],
+  // [$T(s,a)$], [the transition function from state $s$ given action $a$],
+  // [$R(s,a,s')$], [the reward function from state $s$ to state $s'$ given action $a$],
+  //! [$R(s,a)$], [the reward function from state $s$ given action $a$],
+  // [$rho_0$], [the initial state distribution],
+  // [$pi$], [policy (decision-making rule)],
+  // [$pi(s)$], [action choose by the policy $pi$ in state $s$],
+  
+  // [$Q(s,a)$], [the action-value function of state $s$ and action $a$],
+  // [$V(s)$], [the value function of state $s$],
+  //? [$V^*(s)$], [the optimal value function of state $s$],
+  //? [$Q^*(s,a)$], [the optimal action-value function of state $s$ and action $a$],
+  // [$gamma$], [the discount factor],
+  //? [$alpha$], [the learning rate],
+
+  // [Multi-Agent Markov Decision Process:], [],
+  // [$cal(A)$], [the joint action space],
+  // [$cal(a)$], [the joint action],
+  // [$cal(T)(s,cal(a),s')$], [the transition function from state $s$ to state $s'$ given joint action $cal(a)$],
+  // [$cal(T)(s,cal(a))$], [the transition function from state $s$ given joint action $cal(a)$],
+  // [$cal(R)(s,cal(a),s')$], [the reward function from state $s$ to state $s'$ given joint action $cal(a)$],
+  // [$cal(R)(s,cal(a))$], [the reward function from state $s$ given joint action $cal(a)$],
+  // [$A^i$], [the action space of agent $i$],
+  // [$a^i$], [the action of agent $i$],
+  // [$tau$], [a transition defined as $tau = angle.l s, cal(a), r, s' angle.r$],
+)
+// add acronyms
+== Acronyms
+#show table.cell.where(y: 0): strong
+#set table(
+  stroke: (x, y) => if y == 0 {
+    (bottom:black)
+  },
+)
+#table(
+  columns: 2,
+  table.header(
+    [Acronym],
+    [Full Name],
+  ),
+  [AI], [Artificial Intelligence],
+  [DAI], [Distributed Artificial Intelligence],
+  [DPS], [Distributed Problem Solving],
+  [MAS], [Multi-Agent Systems],
+  [MAL], [Multi-Agent Learning],
+  [RL], [Reinforcement Learning],
+  [SL], [Supervised Learning],
+  [MDP], [Markov Decision Process],
+  [POMDP], [Partially Observable Markov Decision Process],
+  [CTDE], [Centralized Training with Decentralized Execution],
+  [VDN], [Value Decomposition Networks],
+  [IQL], [Independent Q-Learning],
+  [MMDP], [Multi-Agent Markov Decision Process],
+  [SMAC], [StarCraft Multi-Agent Challenge],
+  [LLE], [Laser Learning Environment],
+  [MARL], [Multi-Agent Reinforcement Learning],
+)

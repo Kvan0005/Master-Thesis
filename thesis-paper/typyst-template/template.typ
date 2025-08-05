@@ -35,9 +35,9 @@
     top: 0.7em,
     align(center, 
     box(
-      width: 70%,
+      width: 110%,
       grid(
-          columns: (1fr, 1fr),
+          columns: (1fr, 1fr, 1fr),
           gutter: 5em,
           align(left,
             emph(authors.at(0).status) + ":" + linebreak() + authors.at(0).name
