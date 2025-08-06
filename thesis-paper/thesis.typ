@@ -1,8 +1,12 @@
 #import "typyst-template/template.typ": project
 #import "@preview/dashy-todo:0.0.2": todo
 #import "@preview/gantty:0.4.0": gantt
-
+#import "@preview/codly:1.2.0": *
+#show: codly-init
+#import "@preview/codly-languages:0.1.8": *
+#codly(languages: codly-languages)
 #set footnote(numbering: "*")
+
 #show: project.with(
   title: "Analyzing MARL algorithms in 
   dynamic environment: 
@@ -288,17 +292,73 @@ The reward function in LLE is only defined by 2 types of rewards:
 - Negative reward:
   - Being killed by a laser beam: When an agent occupies a cell with a laser beam of a different color, it is killed and set the reward counter to -1.
 == Implementation
-...
+The core of the LLE is Implemented in Rust with an additional layer of python for simple manipulation and is available on GitHub #link("https://github.com/yamoling/lle/")[LLE].
+=== Structure
+The structure used at the core level and the python layer are generally the same, with the main difference being that the python layer is designed to be more user-friendly and have a additional feature which is the "observation"
+=== World
+The world is an important component of the LLE. It represents the environment as a whole, including the grid, agents, and all other elements. And it is represented by the `World` struct in Rust:
+```rust
+pub struct World {
+    width: usize,
+    height: usize,
 
+    grid: Vec<Vec<Tile>>,
+    agents: Vec<Agent>,
+    laser_source_positions: Vec<Position>,
+    lasers_positions: Vec<Position>,
+    gems_positions: Vec<Position>,
+    /// Possible random start position of each agent.
+    random_start_positions: Vec<Vec<Position>>,
+    void_positions: Vec<Position>,
+    exits: Vec<Position>,
+    agents_positions: Vec<Position>,
+    wall_positions: Vec<Position>,
+
+    available_actions: Vec<Vec<Action>>,
+    /// The actual start position of the agents since the last `reset`.
+    start_positions: Vec<Position>,
+    rng: rand::rngs::StdRng,
+}
+```
+where:
+- `width` and `height` are the dimensions of the grid world.
+- `grid` is a 2D vector representing the grid world, where each cell is a `Tile` (e.g., wall, gem, laser beam, etc.).
+- `agents` is a vector of `Agent` 
+- `laser_source_positions` is a vector of positions (tuples) of where the laser sources are located in the grid.
+- `lasers_positions` is a vector of positions of where the laser beams are located in the grid.
+- `gems_positions` is a vector of positions of where the gems are located in the grid.
+- `random_start_positions` is a vector of vectors of positions where the agents can start randomly (this is not used in the current state of the environment).
+- `void_positions` is a vector of positions where the agents can move freely without any obstacles (this is not used in the current state of the environment).
+- `exits` is a vector of positions where the exit points are located in the grid.
+- `agents_positions` is a vector of positions where the agents are located in the grid.
+- `wall_positions` is a vector of positions where the walls are located in the grid.
+- `available_actions` is a vector of vectors of actions available for each agent at a given time.
+- `start_positions` is a vector of positions where the agents start at the beginning of the episode.
+- `rng` is a random number generator used to generate random numbers for the environment.
+
+=== Observation 
+The observation in LLE is a simplified representation of the environment that agents can use to make decisions. It is located in the python layer and is a condensed version of the world state. The observation has multiple formats, including:
+- `Layered`
+- `Flattened`
+- `Partial` 
+- `RGB_Image`
+- ...
+where not all formats are intresting for the current research, 
+The most interesting observation format for the current research is the `Layered` observation, Which is a 3D tensor (3 level of depth) where 2 dimentsion represent the grid world and the third dimension represents the different layers of the observation. The layers are splited into: 
+- one layer per agent, where each layer represents the agent's position and its color
+- one layer for the walls, where the wall cells are represented by 1 and the empty cells by 0
+- one layer for the gems, where the gem cells are represented by 1 and the empty cells by 0
+- one layer per colored laser, where -1 represents the laser source, 1 represents the laser beam, and 0 represents an empty cell
+- one layer for the exit points, where the exit cells are represented by 1 and the empty cells by 0
 
 == Environment Challenges
-The environment is aimed at testing the performance of MARL algorithms tailored for decentralized cooperative scenarios and includes challenges not present in other environments such as the StarCraft Multi-Agent Challenge (SMAC) @samvelyan_starcraft_2019 or the Hanabi environment @bard_hanabi_2020. Instead, this environment is designed to incorporate factors such as perfect coordination, interdependence, and zero-incentive dynamics @molinghen_laser_2024#todo("maybe add subsec for the 3 factors").
+The environment is aimed at testing the performance of MARL algorithms tailored for decentralized cooperative scenarios and includes challenges not present in other environments such as the StarCraft Multi-Agent Challenge (SMAC) @samvelyan_starcraft_2019 or the Hanabi environment @bard_hanabi_2020. Instead, this environment is designed for incorporate factors such as perfect coordination, interdependence, and zero-incentive dynamics @molinghen_laser_2024#todo("maybe add subsec for the 3 factors").
 
 == Multi-Agent Markov Decision Process
-The model of the environment is based on the Multi-Agent Markov Decision Process (MMDP) @boutilier_planning_nodate, a generalization of the Markov Decision Process (MDP) to multiple agents. The MMDP is a tuple $angle.l n, S, cal(A), cal(T), cal(R), s_0, s_f angle.r$ where:
+The model of the environment is based on the Multi-Agent Markov Decision Process (MMDP) @boutilier_planning_nodate, a generalization of the Markov Decision Process (MDP) for multiple agents. The MMDP is a tuple $angle.l n, S, cal(A), cal(T), cal(R), s_0, s_f angle.r$ where:
 - $n$ is the number of agents
 - $S$ is the set of states
-- $cal(A) equiv A^1 times A^2 times ... times A^n$ is the joint action space, and $A^i$ is the set of actions available to agent $i$ #footnote[$A^i$ was modified from the original notation $A_i$ to avoid confusion with the action space at a given time $t$])
+- $cal(A) equiv A^1 times A^2 times ... times A^n$ is the joint action space, where $A^i$ is the set of actions available to agent $i$ #footnote[$A^i$ was modified from the original notation $A_i$ to avoid confusion with the action space at a given time $t$])
 - $cal(a) equiv (a^1, a^2, ..., a^n) in cal(A)$ is the joint action of all agents, where $a^i$ is an action of agent $i$
 - $cal(T): S times cal(A) arrow Delta_S$ is a function that gives the probability of transitioning from state $s$ to state $s'$ given a joint action $cal(a)$
 - $cal(R): S times cal(A) times S arrow bb(R)$ is the function that returns the reward obtained when transitioning from state $s$ to state $s'$ given a joint action $cal(a)$
