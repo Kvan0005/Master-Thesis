@@ -1,0 +1,9 @@
+- [x] Les acronymes toujousr présentés +table à la fin
+- [x] Bouger la notation sheet
+- [ ] présenter les algos/champs de de recherche alternatifs qui peuvent répondre au sujet + éventuellement justifier pourquoi tu prends la direction de MARL
+- [ ] expliquer LLE en détail
+- [ ] inclure des figures qui montrent des exemples pour lle + pour les différents composants (laser/agent/couleur/victoire/défaite/gemme)
+- ~~montrer des executions des algorithmes sous forme de figure~~
+- [ ] ajouter une section méthodo avec les modif d'environnement, les métriques et l'implementation
+- [ ] déplacer les further questions vers une autre section ou vers la section des questions à répondre
+- [ ] relire les typos/les majuscules/les paragraphes manquants

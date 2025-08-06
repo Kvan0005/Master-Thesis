@@ -251,8 +251,42 @@ The wall is a cell that cannot be crossed by agents. It is used to create obstac
 The gem is a ephermeral cell that will be collected by the agent when it occupies the cell. The gem is used to reward the team of agents for their cooperation and to encourage them to explore/guide them through the environment. After being collected the cell will became an empty cell.
 
 ==== Laser Beam
-The laser beam is a dynamic cell that can be activated by a laser source ...
+The laser beam is a dynamic cell can only exist by the presence of a laser source, it is crossable and occupiable and have special interaction. 
 
+The Laser beam possess the same color as the source. It exist continuously unless a agent of the same color occupies a cell that located in a position that is inbetween the laser source and the current cell. When this happens the laser beam will be removed and the cell will become an empty cell. After being removed, the laser beam will only be reactivated when the agent step aside.
+
+A agent that is not of the same color as the laser beam can still occupy the same cell as the laser beam, but it will be killed and removed from the environment.
+
+==== Laser Source
+The laser source is not crossable, not occupiable, and does not interact with agents. It has a color and direction in which every empty cell becomes a laser beam and propagates until it hits a wall or a agent of the same color.
+
+The propagation of the laser beam is continuous and is reapplied to every empty cell in the direction of the laser source instantaneously.
+
+==== Exit Point
+The exit point is a special cell that validates the completion of the task for each agent. The game ends when all agents either reach their exit points or are removed from the environment.
+
+When agent reaches its exit point, it is considered successful and will not be able to do other action than "Wait".
+==== Agent
+An agent is a dynamic entity that can move from one cell to another within the environment by executing actions. Agents can only occupy certain types of cells. The objective of the agent is to collaborate with teammates to attain its corresponding exit point.
+
+=== Actions And Transitions
+In LLE, agents can perform the following actions:
+- Move Up
+- Move Down
+- Move Left
+- Move Right
+- Wait (do nothing)
+Each action corresponds to a movement in the grid world, allowing agents to navigate through the environment and interact with cells. The action space is discrete, meaning that agents can only choose from a predefined set of actions at each time step.
+
+The transition function in LLE is deterministic, meaning that the outcome of an action is predictable and does not involve any randomness. thus the transition function $ cal(T)(dot | s, cal(a))#footnote("defined in Chapter 3.5 Multi-Agents Markov Decision Process") $will always result in one specific state. 
+
+=== Rewards
+The reward function in LLE is only defined by 2 types of rewards:
+- Positive reward:
+  - Collecting a gem: When an agent occupies a cell with a gem, it collects the gem and receives a positive reward.
+  - Reaching an exit point: When an agent reaches its corresponding exit point, it receives a positive reward.
+- Negative reward:
+  - Being killed by a laser beam: When an agent occupies a cell with a laser beam of a different color, it is killed and set the reward counter to -1.
 == Implementation
 ...
 
@@ -272,7 +306,7 @@ The model of the environment is based on the Multi-Agent Markov Decision Process
 - $s_f in S$ is the final state
 A transition is defined as $tau = angle.l s, cal(a), r, s' angle.r$ with $r in bb(R)$.
 
-== Algorithm
+== Algorithms
 Based on the MMDP model, the LLE environment is designed to be used with MARL algorithms that follow the Centralized Training with Decentralized Execution (CTDE) paradigm. The environment is compatible with various MARL algorithms, including Value Decomposition Networks (VDN) and Q-Mix. There are also implementations of Independent Q-Learning (IQL) which can be used for comparison purposes.
 
 === Value Decomposition Networks
