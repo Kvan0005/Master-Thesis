@@ -248,12 +248,23 @@ The LLE state is composed of a two dimensional grid of cells, where each cell ca
 ==== Empty Cell
 An empty cell is the default cell type in the environment. It is a crossable and occupiable cell that does not contain any obstacles or rewards, neither interactible.
 
+#figure(
+  image("images/empty_floor2025.png", width: 20%),
+  caption: "An empty cell inbetween walls and gems in the LLE environment"
+)<empty_floor>
+
 ==== Wall
 The wall is a cell that cannot be crossed by agents. It is used to create obstacles in the environment. A wall is not a valid state for an agent to occupy, and is not interactable by agents.
-
+#figure(
+  image("images/wall_floor.png", width: 20%),
+  caption: "A wall cell inbetween empty cells in the LLE environment"
+)<wall_floor>
 ==== Gem 
 The gem is a ephermeral cell that will be collected by the agent when it occupies the cell. The gem is used to reward the team of agents for their cooperation and to encourage them to explore/guide them through the environment. After being collected the cell will became an empty cell.
-
+#figure(
+  image("images/gem_floor.png", width: 20%),
+  caption: "A gem cell inbetween empty cells in the LLE environment"
+) <gem_floor>
 ==== Laser Beam
 The laser beam is a dynamic cell can only exist by the presence of a laser source, it is crossable and occupiable and have special interaction. 
 
@@ -285,6 +296,12 @@ The propagation of the laser beam is continuous and is reapplied to every empty 
 The exit point is a special cell that validates the completion of the task for each agent. The game ends when all agents either reach their exit points or are removed from the environment.
 
 When agent reaches its exit point, it is considered successful and will not be able to do other action than "Wait".
+
+#figure(
+  image("images/exit.png", width: 20%),
+  caption: "An exit point cell inbetween empty cells in the LLE environment"
+)<exit_point>
+
 ==== Agent
 An agent is a dynamic entity that can move from one cell to another within the environment by executing actions. Agents can only occupy certain types of cells. The objective of the agent is to collaborate with teammates to attain a exit point, each agent has a unique color #ref(<agents>)
 #figure(
@@ -453,7 +470,11 @@ A instresting feature that could be added to the LLE environment is a proximity 
 = Time Plan
 #gantt(yaml("gantt.yaml"))
 
-#bibliography("bibliography.bib")
+#let values = (
+  "bib/zotero.bib",
+  "bib/externe.bib"
+)
+#bibliography(values)<bibliography>
 
 = Appendix
 == Notations
