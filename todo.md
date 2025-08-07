@@ -5,5 +5,5 @@
 - [ ] inclure des figures qui montrent des exemples pour lle + pour les différents composants (laser/agent/couleur/victoire/défaite/gemme)
 - ~~montrer des executions des algorithmes sous forme de figure~~
 - [ ] ajouter une section méthodo avec les modif d'environnement, les métriques et l'implementation
-- [ ] déplacer les further questions vers une autre section ou vers la section des questions à répondre
+- [x] déplacer les further questions vers une autre section ou vers la section des questions à répondre
 - [ ] relire les typos/les majuscules/les paragraphes manquants

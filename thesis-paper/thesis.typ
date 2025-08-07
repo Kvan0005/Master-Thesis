@@ -36,7 +36,7 @@ abstract: "In recent years, artificial intelligence (AI) and machine learning (M
 == Background and Objectives
 Multi-Agent Reinforcement Learning (MARL) is a subfield of the Reinforcement Learning domain that focuses on the interaction between multiple agents in a shared environment. In recent years, an increasing amount of research has been conducted in this field to resolve issues that have arisen in the real world @weiss_multiagent_2001 @stone_multiagent_1997. However, most of the research has been done through simulations in environments that do not involve element that has not been added in the training settings. This thesis aims to evaluate the learning performance of MARL algorithms when moving from a known environment with proven working results to a slightly modified environment by adding unknown elements.
 
-Currently, the research is focused on the environment of #link("https://github.com/yamoling/lle")[LLE] (Laser Learning Reinforcement) @molinghen_laser_2024, which is an environment created based on the original game. The environment is a 2D world, also known as a grid world, where one or more agents interact in a cooperative manner. The goal of each individual agent is to reach an exit point while acquiring rewards (in the form of gems) and avoiding obstacles.
+Currently, the research is focused on the environment of #link("https://github.com/yamoling/lle")[LLE] (Laser Learning Reinforcement) @molinghen2023lle , which is an environment created based on the original game. The environment is a 2D world, also known as a grid world, where one or more agents interact in a cooperative manner. The goal of each individual agent is to reach an exit point while acquiring rewards (in the form of gems) and avoiding obstacles.
 
 The objective of the Master's thesis is to develop a new feature in the LLE environment that was also included in the original game Oxen. Moreover, this feature has another objective: to add a new element to the environment that is not included in the agents learning process. This allows for the re-evaluation of the performance of already fine-tuned algorithms trained on the original environment and the observation of any possible bottlenecks that may arise from the addition of these new elements.
 While many Artificial Intelligence (AI) algorithms perform well under training conditions, their ability to adapt to unfamiliar scenarios is limited.
@@ -249,7 +249,7 @@ The LLE state is composed of a two dimensional grid of cells, where each cell ca
 An empty cell is the default cell type in the environment. It is a crossable and occupiable cell that does not contain any obstacles or rewards, neither interactible.
 
 ==== Wall
-The wall is a cell that cannot be crossed by agents. It is used to create obstacles in the environment and to define the boundaries of the grid world#todo("double check if boundary is wall or not"). A wall is not a valid state for an agent to occupy, and is not interactable by agents.
+The wall is a cell that cannot be crossed by agents. It is used to create obstacles in the environment. A wall is not a valid state for an agent to occupy, and is not interactable by agents.
 
 ==== Gem 
 The gem is a ephermeral cell that will be collected by the agent when it occupies the cell. The gem is used to reward the team of agents for their cooperation and to encourage them to explore/guide them through the environment. After being collected the cell will became an empty cell.
@@ -260,19 +260,37 @@ The laser beam is a dynamic cell can only exist by the presence of a laser sourc
 The Laser beam possess the same color as the source. It exist continuously unless a agent of the same color occupies a cell that located in a position that is inbetween the laser source and the current cell. When this happens the laser beam will be removed and the cell will become an empty cell. After being removed, the laser beam will only be reactivated when the agent step aside.
 
 A agent that is not of the same color as the laser beam can still occupy the same cell as the laser beam, but it will be killed and removed from the environment.
-
+#grid(
+  columns: (auto, auto),
+  column-gutter: 1em,
+  figure(
+    image("images/red_font_laser.png"),
+    caption: "Red laser beam with red agent standing in front"
+  ),
+  figure(
+    image("images/red_in_laser.png"),
+    caption: "Red agent in the path of the laser beam"
+  )
+)
 ==== Laser Source
 The laser source is not crossable, not occupiable, and does not interact with agents. It has a color and direction in which every empty cell becomes a laser beam and propagates until it hits a wall or a agent of the same color.
 
 The propagation of the laser beam is continuous and is reapplied to every empty cell in the direction of the laser source instantaneously.
 
+#figure(
+  image("images/laser_orientation.png"), 
+  caption: "all Laser source orientation in the LLE with different colors"
+)<laser_orientation>
 ==== Exit Point
 The exit point is a special cell that validates the completion of the task for each agent. The game ends when all agents either reach their exit points or are removed from the environment.
 
 When agent reaches its exit point, it is considered successful and will not be able to do other action than "Wait".
 ==== Agent
-An agent is a dynamic entity that can move from one cell to another within the environment by executing actions. Agents can only occupy certain types of cells. The objective of the agent is to collaborate with teammates to attain its corresponding exit point.
-
+An agent is a dynamic entity that can move from one cell to another within the environment by executing actions. Agents can only occupy certain types of cells. The objective of the agent is to collaborate with teammates to attain a exit point, each agent has a unique color #ref(<agents>)
+#figure(
+  image("images/agents.png"),
+  caption: "Agents in the LLE environment, each with a unique color"
+)<agents>
 === Actions And Transitions
 In LLE, agents can perform the following actions:
 - Move Up
@@ -378,22 +396,20 @@ where $tilde(Q)_i$ is the value function of agent $i$, and $h^i$ is the history 
 === QMix
 ...
 
-= Objectives
-== Research Questions
+= Research Questions
 The main research question of this thesis is
 - How does the performance of a given algorithm change when unknown elements are introduced into the environment
+this question can be further divided into sub-questions:
   - What metrics can effectively quantify the algorithm robustness to novel elements ? 
   - Can existing adaptation mechanisms mitigate the impact of unknown elements on algorithm performance ? 
+  - How does the introduction of previously unseen environmental elements affect the convergence speed of Multi-Agent Reinforcement Learning (MARL) algorithms that use the CTDE method in cooperative tasks?
+  - Can pre-trained policies adapt without retraining when facing unseen elements?
+  - Does incorporating a lift/lever mechanism as an unknown dynamic element lead to measurable differences in agent behavior compared to the baseline LLE environment?
+  - Can agents adapt to unknown elements faster if the algorithm employs centralized training with decentralized execution (CTDE) versus fully independent learning?
 
-Additional questions include:
-- How does the introduction of previously unseen environmental elements affect the convergence speed of Multi-Agent Reinforcement Learning (MARL) algorithms that use the CTDE method in cooperative tasks?
-- Can pre-trained policies adapt without retraining when facing unseen elements?
-- Can MARL policies trained in a fully known environment generalize to environments with partially unknown dynamics without retraining?
-- Does incorporating a lift/lever mechanism as an unknown dynamic element lead to measurable differences in agent behavior compared to the baseline LLE environment?
-- Can agents adapt to unknown elements faster if the algorithm employs centralized training with decentralized execution (CTDE) versus fully independent learning?
-
-== Evaluation method
-The evaluation method will separated into x parts:
+= Evaluation method
+The evaluation method will separated into 2 parts:
+== Result comparison
 === Same model, different environment
 The first part of the evaluation will consist of evaluating the performance of the algorithms on map of similar difficulty as the original LLE map, but with the addition of the lift and lever. The goal is to observe how the algorithms perform in this new environment and whether they can adapt to the new element.
 
@@ -403,19 +419,33 @@ For this part, the need to get map with equivalent difficulty as the original LL
 The second part of the evaluation will consist of evaluating the performance of the best algorithm trained on the modified environment and comparing it to the performance of the best algorithm trained on the original environment. The goal is to observe whether the addition of the lift and lever has a significant impact on the performance of the
 
 In the same aspect this evaluation will also consider the training process of the algorithms, including the impact on the convergence speed and the number of training episodes required to reach a certain level of performance. 
-=== Evaluation Metrics
+== Evaluation Metrics
 The evaluation metrics will be based on the reward obtained by the team of agents in the environment. The reward is a scalar value that represents the number of gems collected by the agents and the rate of success in reaching the exit point. The reward is calculated as follows:
 - The reward is the sum of the number of gems collected by the agents.
 - The reward is the number of agents that reached the exit point.
 
-== Implementation requirements
-The objective of this thesis is to develop a new feature in the LLE environment that consists of adding a lift, which allows agents to have more possible actions. With this new feature, the aim is to evaluate the performance of previously trained MARL algorithms on the original environment and observe whether potential bottlenecks arise from the addition of this element. The lift is designed to be used in conjunction with the lever, which activates the lift.
+= Implementation requirements
+In order to achieve the objectives of this thesis, some features must be implemented in the LLE environment. These features include the lift and lever, ut also add a new architecture for the environment allowing addtionnal layer which will be needed for the lift. With those new features, the aim is to evaluate the performance of previously trained MARL algorithms on the original environment and observe whether potential bottlenecks arise from the addition of this element. The lift is designed to be used in conjunction with the lever, which activates the lift.
 
-=== Lift
-The lift is a terrain type that allows agents to reach higher levels in the environment. It is designed to work with the lever, which activates it. The lift can be used to access new areas of the environment, enabling agents to explore and find alternative paths to their goals.
+== Lift
+The lift is a terrain that allows agents to reach higher levels in the environment. It is designed to work with the lever, which activates it. The lift can be used to access new areas of the environment, enabling agents to explore and find alternative paths to their goals.
 
-=== Lever
-The lever is a terrain type that agents can interact with when standing on it. The lever activates the lift, allowing agents on the lift to switch floors. It is intended to work in conjunction with the lift, enabling agents to reach new areas of the environment.
+Implementation-wise, the lift need to be added as a new tile type in the environment and possess the following properties:
+- It is crossable and occupiable by agents.
+- It should be able to linked to a lever.
+- It need to be able to have a spatial representation.
+- If the lift is not on the same floor as the agent, the agent will not be able to go on the lift.
+- The lift should be able to switch floors when the lever is activated. 
+== Lever
+The lever is a terrain that agents can interact with when standing on it. The lever activates the lift, allowing agents on the lift to switch floors. It is intended to work in conjunction with the lift, enabling agents to reach new areas of the environment.
+
+Implementation-wise, the lever need to be added as a new tile type in the environment and possess the following properties:
+- It is crossable and occupiable by agents.
+- It need to be able to have a spatial representation.
+- If the lever is not activated, the lift will not switch floors.
+- Add a mechanism of interaction to be able to activate the lever when an agent is standing on it.
+== Extra dimension
+By adding a third dimension to the environment, there is a need to modify the current architecture of the environment to allow for the representation of all features mentioned above. This includes the lift and lever, as well as the additional layer for the observation. 
 == Other possiblilities
 === Proximity channel
 A instresting feature that could be added to the LLE environment is a proximity channel. This channel would allow agents to communicate with each other when they are close enough, enabling them to share information in some limited way. 
