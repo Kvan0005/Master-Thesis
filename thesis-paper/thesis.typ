@@ -47,26 +47,8 @@ This investigation not only contributed to the extension of the LLE, but also pr
 
 In the following sections, we will delve into the theoretical foundations of the work, exploring the concepts of Multi-Agent Systems (MAS), Multi-Agent Reinforcement Learning (MARL), and the challenges associated with these systems. We will also discuss the implementation details of the LLE environment and the new feature added to it. Finally, we will present the main question that will be the center of master thesis. A appendix will also be provided to detail about basic mathematical sybols used in the work #ref(<notations>), and acronyms used in the work #ref(<acronyms>).
 = State of the Art
-== Origin of Multi-Agent Systems
-Distributed Artificial Intelligence (DAI) is a field of study that has been rising over the last two decades, mainly focused on distributed systems. A distributed system, as defined by #cite(<panait_cooperative_2005>,form:"prose"), is #quote("where a number of entities work together to cooperatively solve problems"). This kind of study is not new, it has been explored for a long time@weiss_multiagent_2001@stone_multiagent_1997. What is new, however, is the rise of the internet and the multitude of electronic devices available today, which has created the need for a new field of study: DAI. DAI is essentially the study of the interaction between multiple artificial intelligences (AIs) or agents in a distributed system.
-Within this field, two main subfields can be identified. The more traditional one is Distributed Problem Solving (DPS), which follows a divide-and-conquer paradigm. DPS focuses on distributing the problem to independent agents (or slaves) that solve it independently. On the other hand, Multi-Agent Systems (MAS) emphasize interaction between agents.
-
-=== Multi-Agent Systems
-In MAS, a few constraints are imposed on agents. Even though agents work together to solve a problem in the same environment, they are not able to share their knowledge of the environment with each other. They can only access the information they individually perceive, which in RL is often referred to as a local observation. This is an important point because if agents were able to share their knowledge, they could simply synchronize it and solve the problem as a DPS problem if the problem required no interaction between agents #todo("may require more writing").
-
-== Multi-Agent Learning
-Multi-Agent Learning (MAL)
-(todo):
-
-- Use articles that explain different MAS approaches to clarify what MARL is
-- Explain why MARL is interesting
-- Use the Molinghen article to describe the LLE environment
-- Explain why adding a new element in the environment is interesting
-- Explain LLE agent standards
-
 == Reinforcement Learning
-=== AI foundations
-The AI field has been existing for a long time @works_computing_1950, and has evolved significantly over the years. from its early beginnings in symbolic reasoning and rule-based systems @russel2010, to the rise of Machine Learning (ML) and its subfields such unsupervised learning, supervised learning, and reinforcement learning (RL). These subfields have been developed to address different types of problems and have their own strengths and weaknesses.
+The AI field has been existing for a long time @works_computing_1950, and has evolved significantly over the years. from its beginnings in symbolic reasoning and rule-based systems @russel2010, to the rise of Machine Learning (ML) and its subfields such unsupervised learning, supervised learning, and reinforcement learning (RL).
 
 === Supervised Learning
 Supervised Learning (SL) is a subfield of Machine Learning (ML) focused on training a model from a set of labeled data. The goal of SL is to learn a function that maps the input data (e.g., an image) to output data (or labels, e.g., the class of the image) as accurately as possible. SL is often used in computer vision and natural language processing (e.g., @kamath_deep_2019), where the goal is to create a model capable of classifying data into specific classes based on the data learned during training.
@@ -75,12 +57,13 @@ Supervised Learning (SL) is a subfield of Machine Learning (ML) focused on train
 Unsupervised Learning (UL) is another subfield of ML that focuses on learning from unlabeled data. The goal of UL is to discover patterns or structures in the data without any prior knowledge of the labels. UL is often used in clustering and dimensionality reduction tasks, where the goal is to group similar data points together or reduce the dimensionality of the data while preserving its structure.
 
 === Reinforcement Learning
-RL is a subfield of Machine Learning (ML) that focuses on learning from the interaction between an agent and its environment. Compared to supervised learning, the learner (agent) is not provided with explicit information about the environment or which actions to perform. RL is based on trial and error: by interacting with the environment, the learner acquires or loses points, which serve as the only source of feedback. Thus, agents attempt to maximize the number of points they receive @sutton_reinforcement_2014.
+RL is a subfield of Machine Learning (ML) that focuses on learning from the interaction between an agent and its environment. Compared to supervised learning, the learner (agent) is not provided with explicit information about the environment or which actions to perform. RL is based on trial and error: by interacting with the environment, the learner acquires or loses points, which serve as the only source of feedback. Thus, agents attempt to maximize the number of rewards obtained @sutton_reinforcement_2014.
 
 ==== Agent
 An agent in RL can be seen as a learner or decision-maker equipped with a set of tools to observe and interact with its environment. These tools are generally divided into two components:
 - Sensors used to perceive the environment and gather information (e.g., the five human senses).
 - Actuators used to interact with the environment and perform actions (e.g., human hands or legs).
+
 == Single Agent Reinforcement Learning
 === Markov Decision Process
 In Single-Agent Reinforcement Learning (RL), the methodology used to model the environment is the Markov Decision Process (MDP) @puterman_markov_2009. The MDP is a mathematical framework used to model the interaction between an agent and its environment@bellman_markovian_1957. It is often employed to represent the decision-making process of an agent in a stochastic environment. The MDP is a powerful tool that allows the environment to be modeled in a way that is both easy to understand and analyze.
@@ -99,10 +82,10 @@ Another strength of formalizing a problem to an MDP is that it allows abstractio
 - the state $s$
 - the action $a$
 - the reward $r$
-It also introduces key functions such as the Bellman equation which is explained futher, which uses the Markov property to represent the relationship between the value of a state and the value of its successor states. But before diving into the Bellman equation, it is also important to understand that the objectives of the agent in RL are to maximize the expected return, Which is needed to develop an effective policy for the agent.
+These signals are used to represent the interaction between the agent and the environment, allowing the agent to learn from its experiences and improve, the imporvement are mainly done by adjusting the policy of the agent, which is futher explained with the Bellman equation in MDPs section. Another important aspect of the MDP is the hypothesis of the environment being stationnary, which means that the environment does not change over time such that for same state $s$ and action $a$, the transition and reward distributions remain the same. This is an important assumption because it allows the agent to learn a policy that is optimal for the environment.
 
 ==== State
-One way to represent the environment is through a state. A state is an abstract way to describe the combined information of all elements in the environment. As an example, in the game of tic-tac-toe, the representation of the board at a given time, such as in this image @state, is a state. However, a state is not only the representation of the board but also includes information about the player's turn. Therefore, a state represents the environment at a given time.
+One way to represent the environment is through a state. A state is the encapsulation of all information about the environment at a given time. As an example, in the game of tic-tac-toe, the representation of the board at a given time, such as in this image @state, is a state. However, a state is not only the representation of the board but also includes information about the player's turn. Therefore, a state represents the environment at a given time.
 
 In mathematical notation, $s$ is used to represent a state, and $S$ to represent the state space. The state space is the set of all possible states for a given environment.
 - $S$ is the state space of the environment
@@ -111,20 +94,20 @@ In mathematical notation, $s$ is used to represent a state, and $S$ to represent
 #figure(image("images/state.png", width: 45%),
         caption: "A state in the game of tick-tac-toe")<state>
 
-=== Observation
-An observation is a partial description of a state. Instead of providing complete information about the environment, the observation provides only the information acquired by the agent. Observations are often used when the agent does not have access to complete information about the environment, such as in a partially observable environment (POMDP) (#todo("getref")). The observation is denoted as:
+==== Observation
+An observation is a partial description of a state. Instead of providing complete information about the environment, the observation provides only the information acquired by the agent. Observations are often used when the agent does not have access to complete information about the environment, such as in a partially observable environment (POMDP). The observation is denoted as:
 - $O$ is the observation space
 - $o_t$ is the observation at time $t$ in the observation space, given that $o_t in O$
 An analogy for an observation is being in a room where only what is in front is visible, while what is behind cannot be seen. In this case, the observation is the information visible in front, but not the complete information about the room.
 
-=== Action
+==== Action
 An action refers to the possible movement the agent can perform in the environment. In the case of the game of tic-tac-toe, the possible actions are placing a mark in one of the available cells out of the 9 cells. For example, in the previous example @state, the "O" player has the following possible actions to choose from: [top left, top center, middle right, bottom left, bottom center, bottom right]. In mathematical notation, $a$ is used to represent an action (e.g., "top left") and $A$ to represent the action space (e.g., the list of all actions mentioned above).
 - $A$ is the action space of the environment
 - $A(s)$ is the action space available in state $s$ (e.g., the list of all actions available in the state $s$)
 - $a$ is an action in the action space, given that $a in A$
 - $a_t$ is the action at time $t$ in the action space
 
-=== Transition
+==== Transition
 The transition is the function used to represent the change of a given state after taking an action. It is a probability function used to represent the stochasticity of an environment. A real-life example can be taken from sports: when about to perform an action like a squat or a sprint, a cramp or muscle tear may occur, placing the body in an unexpected state. This illustrates the stochastic nature of an environment. Using this example:
 - $s$ or $s'$ is the state of the body when it is "healthy"
 - $c$ is the state of the body when it is "cramped" or "unhealthy"
@@ -140,27 +123,35 @@ Alternatively, the transition function can also be represented as a conditional 
 - $T(dot| s, a)$ where $T : S times A -> Delta_S$ and $Delta_S$ is the set of probability distributions over the state space $S$.
 $T(s' | a, s) = Pr(s' | a, s)$
 
-=== Reward
+==== Reward
 The reward function takes an initial state, an action, and a final state as input. Unlike the transition function, which returns a probability, the reward function returns a scalar value that can be interpreted as a score. Instead of representing the change of a state, the reward function gives a purpose or goal to the agent.
 
-Returning to the sports example, the score can be seen as the motivation to perform the action based on a certain goal. For example, on a treadmill when aiming to lose a certain amount of calories, the reward function is the calories burned. Running faster places the body in a state where more calories are burned but also increases the likelihood of a cramp.
+Formally, the reward function is:
+$ R : S times A times S -> bb(R) $
 
-The reward function is represented as:
+And will be use with the following notation:
 $ R(s' | a, s) $
 where $s$ is the initial state, $a$ is the action, and $s'$ is the final state.
 
-Mathematically, the reward function is:
-$ R : S times A times S -> bb(R) $
-
 The reward resulting from the reward function is assigned to the variable $r$, and the reward at time $t$ is commonly written as:
 $ r_t = R(s_(t+1) | a_t, s_(t)) $
-== Bellman Equation in MDPs
-The Bellman equation is a fundamental concept in reinforcement learning and Markov Decision Processes (MDPs). It describes the relationship between the value of a state and the values of its successor states. The Bellman equation
-#todo("CheckPoint")
 
-=== Return
+
+Returning to a real world example, the score can be seen as the motivation to perform the action based on a certain goal. For example, on a treadmill when aiming to lose a certain amount of calories, the reward function is the calories burned. Running faster places the body in a state where more calories are burned but also increases the likelihood of a cramp.
+
+=== Bellman Equation in MDPs
+The Bellman equation is a fundamental concept in reinforcement learning and Markov Decision Processes (MDPs). It describes the relationship between the value of a state and the values of its successor states. The Bellman equation is used to compute the value of a state or action in an MDP, and it is a key component of many reinforcement learning algorithms.
+The Bellman equation is often written as:
+$ V^pi (s) = max_a [ R(s, a) + gamma * sum_(s') T(s' | s, a) * V^pi (s') ] $
+where:
+- $V^pi(s)$ is the value of state $s$ under policy $\pi$
+- $R(s, a)$ is the reward received for taking action $a$ in state $s$
+- $gamma$ is the discount factor, which determines the importance of future rewards
+- $T(s' | s, a)$ is the transition probability from state $s$ to state $s'$ given action $a$
+The Bellman equation is used to compute the value of a state or action in an MDP, and it is a key component of many reinforcement learning algorithms. It is often used to derive the optimal policy for an MDP, which is the policy that maximizes the expected return.
+==== Return
 Unlike the reward, which is a scalar value given at a specific time, the return is the cumulative reward observed over a period of time. It can be either finite or infinite. In the finite case, the return is also called the #strong("finite-horizon undiscounted return") and is represented as:
-$ R("trajectory placeholder") = sum_(t=0)^(T-1) r_t $ #todo("need better notation due to conflict with the reward and multi-agent notation")
+$ R("trajectory placeholder") = sum_(t=0)^(T-1) r_t $
 where $T$ is the time horizon and $tau$ is the trajectory of the agent.
 
 In the infinite case, the discount factor $gamma$ must be taken into account to avoid an unbounded, the infinite-horizon discounted return is often represented as:
@@ -168,60 +159,77 @@ $ R("trajectory placeholder") = sum_(t=0)^(infinity) gamma^t r_t $
 
 The return is often a better measure for evaluating the performance of certain trajectory and by adding the discount factor $gamma$, it allows the agent to put more importance on recent rewards over distance rewards. And given that $gamma$ is a parameter in the interval $[0,1]$, it can be used to control the importance of future rewards. A value of $gamma = 0$ means that only the immediate reward is considered, while a value of $gamma = 1$ means that all future rewards are considered equally important.
 
-=== Trajectory
+==== Trajectory
 A trajectory is a sequence of states, actions, and rewards that the agent experiences in the environment. The trajectory is written as
 $ "trajectory placeholder" = (S_1, A_1, R_1, S_2, A_2, R_2, ...) $
 where the initial state of the environment $S_1$ is randomly sampled from the start state distribution $rho_0:S_1 tilde rho_0$. The state transitions must follow the transition function $T$, and the actions must be sampled from the action space $A$ at a given time $t$:
-$S_(t+1) tilde T(dot | S_(t), A_(t))$
+$ S_(t+1) tilde T(dot | S_(t), A_(t)) $
 
-=== History
+==== History
 A history is a sequence of actions, observations, and rewards that the agent experiences in the environment. It is often used to represent the past actions and observations of the agent. The history is commonly written as:
 $ h_t = (o_1, a_1, r_1, o_2, a_2, r_2, ..., o_(t-1), a_(t-1), r_(t-1)) $
 where $o_t$ is the observation, $a_t$ is the action, and $r_t$ is the reward at time $t$.
 
 The main difference between a trajectory and a history is that a trajectory contains all information about the environment, while a history contains only the information gathered by a specific agent. An analogy is an escape room: the history is what the player recalls from past actions and observations, while the trajectory is what the game master (who knows all the secret information that the player does not know) sees of the player's actions in the escape room.
 
-=== Policy
+==== Policy
 A policy can be seen as the decision-making rule of the agent, where for any given state it has a mapping to a set of probabilities over the possible actions. The policy is represented as:
 $ pi_theta : S -> Delta_A $
 where $pi$ is the policy, $theta$ is the parameter of the policy, $S$ is the state space, and $Delta_A$ is the set of probability distributions over the action space $A$. thus maze solving agent that follows a policy $pi$ (e.g. always taking same turn) with $theta$ (e.g. prefer left ) will be aswering "LEFT" to 
 the question "What is the next action to take in state $s$?"
 
-A policy parameter $theta$ is the set of parameters that is used in the policy to determine the action probabilities. These parameters are typically learned from data through a training process.
- 
+A policy parameter $theta$ is the set of parameters that is used in the policy to determine the action probabilities. These parameters are typically learned from data through a training process. 
 ==== Optimal Policy
 The optimal policy is the policy that maximizes the expected return (or value) of the agent. It is represented as:
-$ pi^* = "argmax"_(pi) EE[R("trajectory placeholder") | pi] $
+$ pi^* = "argmax"_(pi) EE [sum_(t=0)^infinity gamma^t r_t | pi] $
+this means that the optimal policy is the one that maximizes the expected return over all possible trajectories. The optimal policy is often used to evaluate the performance of an agent in a given environment.
 
-=== Action-Utility Function
-#todo("double check the action-utility function definition")
-The action-utility function represents the expected return of a given state-action pair. It is expressed as:
-$ Q(s, a) = EE[ sum_(t=0)^(infinity) gamma^t r_t | s_0 = s, a_0 = a, pi ] $
-where $Q(s, a)$ is the action-utility function, $EE$ is the expected value, $gamma$ is the discount factor, and $r_t$ is the reward at time $t$.
+==== Action-Value Function
+The action-Value function represents the expected return of a given state-action pair. It is expressed as:
+$ Q^pi (s, a) = EE^pi [ sum_(t=0)^(infinity) gamma^t r_t | s_0 = s, a_0 = a, pi ] $
+where $Q^pi(s, a)$ is the action-Value function with the policy $pi$, $EE^pi$ is the expected value over the policy $pi$, $gamma$ is the discount factor, and $r_t$ is the reward at time $t$.
 
-The action-utility function is frequently used to evaluate the expected return of specific state-action combinations. It can also be used to derive the optimal policy by maximizing the expected return.
+The action-Value function is frequently used to evaluate the expected return of specific state-action combinations. It can also be used to derive the optimal policy by maximizing the expected return.
 
-=== Value Function
-#todo("same as action-utility function")
+==== Value Function
 The value function represents the expected return of a given state under a policy. It is expressed as:
-$ V(s) = EE[ sum_(t=0)^(infinity) gamma^t r_t | s_0 = s, pi ] $
-where $V(s)$ is the value function, $E$ is the expected value, $gamma$ is the discount factor, and $r_t$ is the reward at time $t$.
+$ V^pi (s) = EE^pi [ sum_(t=0)^(infinity) gamma^t r_t | s_0 = s, pi ] $
+where $V^pi(s)$ is the value function with the policy $pi$, $EE_pi$ is the expected value over the policy $pi$, $gamma$ is the discount factor, and $r_t$ is the reward at time $t$.
 
 The value function is used to evaluate the expected return of states under a given policy and can also be employed to find the optimal policy by maximizing the expected return.
 
+== Origin of Multi-Agent Systems
+Distributed Artificial Intelligence (DAI) is a field of study that has been rising over the last two decades, mainly focused on distributed systems. A distributed system, as defined by #cite(<panait_cooperative_2005>,form:"prose"), is #quote("where a number of entities work together to cooperatively solve problems"). This kind of study is not new, it has been explored for a long time@weiss_multiagent_2001@stone_multiagent_1997. What is new, however, is the rise of the internet and the multitude of electronic devices available today, which has created the need for a new field of study: DAI. DAI is essentially the study of the interaction between multiple artificial intelligences (AIs) or agents in a distributed system.
+Within this field, two main subfields can be identified. The more traditional one is Distributed Problem Solving (DPS), which follows a divide-and-conquer paradigm. DPS focuses on distributing the problem to independent agents (or slaves) that solve it independently. On the other hand, Multi-Agent Systems (MAS) emphasize interaction between agents.
+
+=== Multi-Agent Systems
+In MAS, a few constraints are imposed on agents. Even though agents work together to solve a problem in the same environment, they are not able to share their knowledge of the environment with each other. They can only access the information they individually perceive, which in RL is often referred to as a local observation. This is an important point because if agents were able to share their knowledge, they could simply synchronize it and solve the problem as a DPS problem if the problem required no interaction between agents.
+
 == Multi-Agent Reinforcement Learning
+Multi-Agent Reinforcement Learning (MARL) field located at the intersection of MAS and Reinforcement Learning (RL) where agents learn to cooperate and coordinate their actions to achieve a common goal. MARL used a extended version of the MDP to model the environment, known as Multi-Agent Markov Decision Process (MMDP). The MMDP is a tuple $angle.l n, S, cal(A), cal(T), cal(R), s_0, s_f angle.r$ where:
+- $n$ is the number of agents
+- $S$ is the set of states
+- $cal(A) equiv A^1 times A^2 times ... times A^n$ is the joint action space, where $A^i$ is the set of actions available to agent $i$ #footnote[$A^i$ was modified from the original notation $A_i$ to avoid confusion with the action space at a given time $t$])
+- $cal(a) equiv (a^1, a^2, ..., a^n) in cal(A)$ is the joint action of all agents, where $a^i$ is an action of agent $i$
+- $cal(T): S times cal(A) arrow Delta_S$ is a function that gives the probability of transitioning from state $s$ to state $s'$ given a joint action $cal(a)$
+- $cal(R): S times cal(A) times S arrow bb(R)$ is the function that returns the reward obtained when transitioning from state $s$ to state $s'$ given a joint action $cal(a)$
+- $s_0 in S$ is the initial state
+- $s_f in S$ is the final state
+A transition is defined as $tau = angle.l s, cal(a), r, s' angle.r$ with $r in bb(R)$.
+
 === Stationary vs. Non-stationary
-Originally, it might seem that adding multiple independent agents would not dramatically increase the complexity compared to single-agent RL. However, this assumption has been proven incorrect. (use references)
+Originally, it might seem that adding multiple independent agents would not dramatically increase the complexity compared to single-agent RL. However, this assumption has been proven incorrect.
 
 MARL can be naively viewed as simply adding more than one agent to an RL environment. This introduces new challenges, such as non-stationarity, since the presence of multiple agents alters the dynamics of the environment @bowling_analysis_nodate @panait_cooperative_2005.
 
 Non-stationarity is one of the main challenges in MARL because multiple agents perceive each other as part of the environment that cause it to obseerve "undeterministic" behavior due to their own learning processes. Thus violates the Markov property by definition.
 
 Based on this, two main research trends have emerged in the MARL field:
-- The first, known as concurrent learning, is where agents learn independently from each other. However, this approach does not solve the non-stationarity problem #todo("add depth here").
+- The first, known as concurrent learning, is where agents learn independently from each other. However, this approach does not solve the non-stationarity problem, as each agent perceives the other agents as part of the environment, leading to a violation of the Markov property. Some approaches have been proposed to mitigate this issue@sl but this is not the focus of this work. 
 
 - The second, known as team learning, is where agents learn together as a team. This approach aims to mitigate the non-stationarity problem by allowing agents to act as a single entity while in the training phase. But other challenges arise, such as the search space explosion. or the credit assignment problem.
-=== Search Space
+
+=== State Space
 By using method such as team learning, the agents can be seen as a single entity. However, this leads to a combinatorial explosion in the search space . Let take the joint action space, given that is the cartesian product of the individual action spaces. if grid world of a certain number of cells and 2 agents, each with 4 possible actions (up, down, left, right). The joint action space would be $A^1 times A^2 = 4 times 4 = 16$ possible joint actions and by adding a third agent, would be $64$ possible joint actions. By applying this geometric growth, and giving that we have $n$ agents, each with $m$ possible actions, the joint action space is given by
 $cal(A) = m^n$ 
 thus this model is not possible but not practical to use in real-world scenarios. This is known as the curse of dimensionality.
@@ -233,7 +241,7 @@ In MARL, this problem is particularly pronounced because rewards are often share
 
 
 === Current Approaches
-The current approaches to solving the challenges of credit assignment and non-stationarity in MARL is to use the Centralized Training with Decentralized Execution (CTDE) paradigm @dmap_2020_icaps_factored_2020 this approach allows agents to learn in a centralized manner during training while executing their policies independently during inference or real world deployment. This methode has been shown to be effective in various MARL environments @sutton_reinforcement_2014, @schaul_prioritized_2016.
+The current approaches to solving the challenges of credit assignment and non-stationarity in MARL is to use the Centralized Training with Decentralized Execution (CTDE) paradigm @oliehoek_concise_2016 this approach allows agents to learn in a centralized manner during training while executing their policies independently during inference or real world deployment. This methode has been shown to be effective in various MARL environments @sutton_reinforcement_2014, @schaul_prioritized_2016.
 
 = Laser Learning Environment
 == Overview
@@ -325,103 +333,29 @@ The reward function in LLE is only defined by 2 types of rewards:
   - Being killed by a laser beam: When an agent occupies a cell with a laser beam of a different color, it is killed and set the reward counter to -1.
 == Implementation
 The core of the LLE is Implemented in Rust with an additional layer of python for simple manipulation and is available on GitHub #link("https://github.com/yamoling/lle/")[LLE].
-=== Structure
-The structure used at the core level and the python layer are generally the same, with the main difference being that the python layer is designed to be more user-friendly and have a additional feature which is the "observation"
-=== World
-The world is an important component of the LLE. It represents the environment as a whole, including the grid, agents, and all other elements. And it is represented by the `World` struct in Rust:
-```rust
-pub struct World {
-    width: usize,
-    height: usize,
-
-    grid: Vec<Vec<Tile>>,
-    agents: Vec<Agent>,
-    laser_source_positions: Vec<Position>,
-    lasers_positions: Vec<Position>,
-    gems_positions: Vec<Position>,
-    /// Possible random start position of each agent.
-    random_start_positions: Vec<Vec<Position>>,
-    void_positions: Vec<Position>,
-    exits: Vec<Position>,
-    agents_positions: Vec<Position>,
-    wall_positions: Vec<Position>,
-
-    available_actions: Vec<Vec<Action>>,
-    /// The actual start position of the agents since the last `reset`.
-    start_positions: Vec<Position>,
-    rng: rand::rngs::StdRng,
-}
-```
-where:
-- `width` and `height` are the dimensions of the grid world.
-- `grid` is a 2D vector representing the grid world, where each cell is a `Tile` (e.g., wall, gem, laser beam, etc.).
-- `agents` is a vector of `Agent` 
-- `laser_source_positions` is a vector of positions (tuples) of where the laser sources are located in the grid.
-- `lasers_positions` is a vector of positions of where the laser beams are located in the grid.
-- `gems_positions` is a vector of positions of where the gems are located in the grid.
-- `random_start_positions` is a vector of vectors of positions where the agents can start randomly (this is not used in the current state of the environment).
-- `void_positions` is a vector of positions where the agents can move freely without any obstacles (this is not used in the current state of the environment).
-- `exits` is a vector of positions where the exit points are located in the grid.
-- `agents_positions` is a vector of positions where the agents are located in the grid.
-- `wall_positions` is a vector of positions where the walls are located in the grid.
-- `available_actions` is a vector of vectors of actions available for each agent at a given time.
-- `start_positions` is a vector of positions where the agents start at the beginning of the episode.
-- `rng` is a random number generator used to generate random numbers for the environment.
-
-=== Observation 
-The observation in LLE is a simplified representation of the environment that agents can use to make decisions. It is located in the python layer and is a condensed version of the world state. The observation has multiple formats, including:
-- `Layered`
-- `Flattened`
-- `Partial` 
-- `RGB_Image`
-- ...
-where not all formats are intresting for the current research, 
-The most interesting observation format for the current research is the `Layered` observation, Which is a 3D tensor (3 level of depth) where 2 dimentsion represent the grid world and the third dimension represents the different layers of the observation. The layers are splited into: 
-- one layer per agent, where each layer represents the agent's position and its color
-- one layer for the walls, where the wall cells are represented by 1 and the empty cells by 0
-- one layer for the gems, where the gem cells are represented by 1 and the empty cells by 0
-- one layer per colored laser, where -1 represents the laser source, 1 represents the laser beam, and 0 represents an empty cell
-- one layer for the exit points, where the exit cells are represented by 1 and the empty cells by 0
 
 == Environment Challenges
-The environment is aimed at testing the performance of MARL algorithms tailored for decentralized cooperative scenarios and includes challenges not present in other environments such as the StarCraft Multi-Agent Challenge (SMAC) @samvelyan_starcraft_2019 or the Hanabi environment @bard_hanabi_2020. Instead, this environment is designed for incorporate factors such as perfect coordination, interdependence, and zero-incentive dynamics @molinghen_laser_2024#todo("maybe add subsec for the 3 factors").
+The environment is aimed at testing the performance of MARL algorithms tailored for decentralized cooperative scenarios and includes challenges not present in other environments such as the StarCraft Multi-Agent Challenge (SMAC) @samvelyan_starcraft_2019 or the Hanabi environment @bard_hanabi_2020. Instead, this environment is designed for incorporate factors such as perfect coordination, interdependence, and zero-incentive dynamics @molinghen_laser_2024.
 
-== Multi-Agent Markov Decision Process
-The model of the environment is based on the Multi-Agent Markov Decision Process (MMDP) @boutilier_planning_nodate, a generalization of the Markov Decision Process (MDP) for multiple agents. The MMDP is a tuple $angle.l n, S, cal(A), cal(T), cal(R), s_0, s_f angle.r$ where:
-- $n$ is the number of agents
-- $S$ is the set of states
-- $cal(A) equiv A^1 times A^2 times ... times A^n$ is the joint action space, where $A^i$ is the set of actions available to agent $i$ #footnote[$A^i$ was modified from the original notation $A_i$ to avoid confusion with the action space at a given time $t$])
-- $cal(a) equiv (a^1, a^2, ..., a^n) in cal(A)$ is the joint action of all agents, where $a^i$ is an action of agent $i$
-- $cal(T): S times cal(A) arrow Delta_S$ is a function that gives the probability of transitioning from state $s$ to state $s'$ given a joint action $cal(a)$
-- $cal(R): S times cal(A) times S arrow bb(R)$ is the function that returns the reward obtained when transitioning from state $s$ to state $s'$ given a joint action $cal(a)$
-- $s_0 in S$ is the initial state
-- $s_f in S$ is the final state
-A transition is defined as $tau = angle.l s, cal(a), r, s' angle.r$ with $r in bb(R)$.
-
-== Algorithms
-Based on the MMDP model, the LLE environment is designed to be used with MARL algorithms that follow the Centralized Training with Decentralized Execution (CTDE) paradigm. The environment is compatible with various MARL algorithms, including Value Decomposition Networks (VDN) and Q-Mix. There are also implementations of Independent Q-Learning (IQL) which can be used for comparison purposes.
-
-=== Value Decomposition Networks
-Value Decomposition Networks (VDN) @sunehag_value-decomposition_2017 is a MARL algorithm that leverages the hypothesis of decomposing the joint action-value function into individual value functions for each agent:
-$ Q((h^1, h^2, ..., h^n), (a^1, a^2, ..., a^n)) approx sum_(i=1)^n tilde(Q)_i (h^i, a^i) $ 
-where $tilde(Q)_i$ is the value function of agent $i$, and $h^i$ is the history of agent $i$. This methodology allows agents to learn independently through $tilde(Q)$ while still producing a global result for the group $Q$.
-=== independent Q-learning
-#todo("ask yannick about this")
-=== QMix
-...
+=== Perfect Coordination
+The perfect coordination is a caracteristic which reside in the policy of the agents, where a sequence of specific actions must be executed together in a given state $s_t$ and if any agent fails to execute its action, the whole team will may result in a unfavorable state $s_(t+1)$. 
+This challenge may not be present in other environments, such as Hanabi, where agents may also required to coordinate, but the coordination is softer due to having a turn based system. In LLE, the coordination is more strict, as all agents must execute their actions simultaneously in a given state to achieve the desired outcome. 
+=== Interdependence
+The interdependence is a environment condition where the agents in that environment need to rely on each other in order to achieve their common goal. In the LLE environment, agents must work together to reach their exit points and collect gems, if a agent try to reach its exit point without the help of its teammates, it will not be able to do so. Interdependence is also a the main subject of the research question of this thesis work, as bottlenecks principally arise from higher level of interdependence between agents in the environment. In hanabi and SMAC, the interdependence is more limited and less controlable, as agents can often act independently without relying on their teammates.
+=== Zero-Incentive
+The zero-incentive is a environment condition where being able to overcome state bottlenecks is not rewarded, thus achieving a sub-goal is not rewarded such as blocking laser for teammates to advance in the environment.Compared to other environments such as SMAC, where the no sub-goals exist due to low interdependence between agents. 
+== Environment bottlenecks
+The LLE is designed to have bottlenecks that can arise from the perfect coordination, interdependence, and zero-incentive dynamics. These bottlenecks are intended to challenge the performance of MARL algorithms and test their ability to adapt to those conditions. The bottlenecks can be caused by the 
 
 = Research Questions
 The main research question of this thesis is
-- How does the performance of a given algorithm change when unknown elements are introduced into the environment
+- In the LLE environment, how does adding lifts to existing lasers influence the formation and evolution of bottlenecks
 this question can be further divided into sub-questions:
-  - What metrics can effectively quantify the algorithm robustness to novel elements ? 
-  - Can existing adaptation mechanisms mitigate the impact of unknown elements on algorithm performance ? 
-  - How does the introduction of previously unseen environmental elements affect the convergence speed of Multi-Agent Reinforcement Learning (MARL) algorithms that use the CTDE method in cooperative tasks?
-  - Can pre-trained policies adapt without retraining when facing unseen elements?
-  - Does incorporating a lift/lever mechanism as an unknown dynamic element lead to measurable differences in agent behavior compared to the baseline LLE environment?
-  - Can agents adapt to unknown elements faster if the algorithm employs centralized training with decentralized execution (CTDE) versus fully independent learning?
-
-= Evaluation method
+  - What types of bottlenecks occur in the LLE environment when only lasers are present, and how are they distributed spatially and temporally? 
+  - How does the introduction of lifts modify the frequency and location of bottlenecks compared to a laser-only configuration?
+  - How do different MARL algorithms perform in the LLE environment with and without lifts, and what are the implications for their training and convergence?
+  - How do the agents adapt to the new environment with lifts, and what strategies do they develop to overcome the bottlenecks?
+= Evaluation Methodology
 The evaluation method will separated into 2 parts:
 == Result comparison
 === Same model, different environment
@@ -430,15 +364,13 @@ The first part of the evaluation will consist of evaluating the performance of t
 For this part, the need to get map with equivalent difficulty as the original LLE map is important. The complexity of the map will be determined by the zero-incentive, interdependence, and perfect coordination factors. Given that these factors are not numerically defined, the equivalent difficulty may be subject to subjectivity. Another approach for comparison is to use the number of steps required to reach the goal.
 
 === Best model performance
-The second part of the evaluation will consist of evaluating the performance of the best algorithm trained on the modified environment and comparing it to the performance of the best algorithm trained on the original environment. The goal is to observe whether the addition of the lift and lever has a significant impact on the performance of the
-
-In the same aspect this evaluation will also consider the training process of the algorithms, including the impact on the convergence speed and the number of training episodes required to reach a certain level of performance. 
+The second part of the evaluation will consist of evaluating the performance of the best algorithm trained on the modified environment and comparing it to the performance of the best algorithm trained on the original environment. The goal is to observe whether the addition of the lift and lever has a significant impact on the appearance and evolution of bottlenecks in the environment.
 == Evaluation Metrics
 The evaluation metrics will be based on the reward obtained by the team of agents in the environment. The reward is a scalar value that represents the number of gems collected by the agents and the rate of success in reaching the exit point. The reward is calculated as follows:
 - The reward is the sum of the number of gems collected by the agents.
 - The reward is the number of agents that reached the exit point.
 
-= Implementation requirements
+= System Requirements and Design Considerations
 In order to achieve the objectives of this thesis, some features must be implemented in the LLE environment. These features include the lift and lever, ut also add a new architecture for the environment allowing addtionnal layer which will be needed for the lift. With those new features, the aim is to evaluate the performance of previously trained MARL algorithms on the original environment and observe whether potential bottlenecks arise from the addition of this element. The lift is designed to be used in conjunction with the lever, which activates the lift.
 
 == Lift
@@ -468,7 +400,7 @@ A instresting feature that could be added to the LLE environment is a proximity 
   "bib/zotero.bib",
   "bib/externe.bib"
 )
-#bibliography(values, full: true)<bibliography>
+#bibliography(values)<bibliography>
 
 = Appendix
 == Notations<notations>
