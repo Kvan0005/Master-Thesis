@@ -32,20 +32,18 @@ abstract: "In recent years, artificial intelligence (AI) and machine learning (M
 )
 
 = Introduction
-Immagine a fleet of autonomous vehicles navigating through a city, each equipped with advanced Artificial Intelligence (AI) algorithms to accomplish a specific mission, while navigating through a complex and hazardous environment and still achieving a optimum solution by cooperation. This scenario is no longer a far-fetched vision of the future, but a current reality, driven by recent advancements in AI and Machine Learning (ML). In recent years, AI and ML research
-has made significant leaps. However, even with these advancements, AI systems still struggle sometimes to escape bottlenecks which impact drastically the learning efficiency.
+Imagine a fleet of autonomous vehicles navigating through a city, each equipped with advanced Artificial Intelligence (AI) algorithms to accomplish specific missions, while navigating through a complex and hazardous environment and still achieving an optimal solution by cooperation. This scenario is no longer a far-fetched vision of the future but a current reality, driven by recent advancements in AI and Machine Learning (ML). In recent years, AI and ML research has made significant leaps. However, even with these advancements, AI systems still sometimes struggle to overcome bottlenecks that drastically impact learning efficiency.
 
-This work aims to investigate how bottlenecks emerge by perturbing existing environment with the addition of new elements in the environment, By doing so, we can observe how the performance of previously designed algorithms is affected by the introduction of these new pertubations.
+ This work aims to investigate how bottlenecks emerge by perturbing an existing environment through the addition of new elements. By doing so, we can observe how the performance of previously designed algorithms is affected by these perturbations.
 
-The current work is focused on the environment of Laser Learning Environment (LLE) @molinghen2023lle , which a toy environment created with the goal of evaluating the performance of Multi-Agent Reinforcement Learning (MARL) algorithms. The goal of the environment is by controling a agent in a group of agents to reach an exit point while collecting gems and avoiding obstacles. 
+The current work focuses on the Laser Learning Environment (LLE) @molinghen2023lle, a toy environment created to evaluate the performance of Multi-Agent Reinforcement Learning (MARL) algorithms. The objective of the environment is to control an agent within a group of agents to reach an exit point while collecting gems and avoiding obstacles.
 
-The core objective of the Master's thesis Work is to develop a new feature in the LLE environment that was also included in the original game Oxen. Moreover, this feature has another objective: we aims to observe if it is possible to have emerging bottlenecks just by slightly modifying the environment. This allows for the re-evaluation of the performance
-of already fine-tuned algorithms from original environment and the obser-
-vation of any possible bottlenecks that may arise from the addition of these new elements.
+The core objective of this Master’s thesis work is to develop a new feature in the LLE environment that was also included in the original game Oxen. Moreover, this feature serves another purpose: to observe if bottlenecks can emerge simply by slightly modifying the environment. This enables the re-evaluation of the performance of already fine-tuned algorithms from the original environment and the observation of possible bottlenecks arising from the addition of these new elements.
 
-This investigation not only contributed to the extension of the LLE, but also provide insights into the robustness of MARL algorithms in increasingly complex environments.
+This investigation not only contributes to the extension of the LLE but also provides insights into the robustness of MARL algorithms in increasingly complex environments.
 
-In the following sections, we will delve into the theoretical foundations of the work, exploring the concepts of Multi-Agent Systems (MAS), Multi-Agent Reinforcement Learning (MARL), and the challenges associated with these systems. We will also discuss the implementation details of the LLE environment and the new feature added to it. Finally, we will present the main question that will be the center of master thesis. A appendix will also be provided to detail about basic mathematical sybols used in the work #ref(<notations>), and acronyms used in the work #ref(<acronyms>).
+In the following sections, we will delve into the theoretical foundations of the work, exploring the concepts of Multi-Agent Systems (MAS), Multi-Agent Reinforcement Learning (MARL), and the associated challenges. We will also discuss the implementation details of the LLE environment and the new feature added. Finally, we will present the main research question that will be the focus of this Master’s thesis. An appendix will also be provided detailing the basic mathematical symbols used in the work #ref(<notations>) and acronyms used throughout #ref(<acronyms>).
+
 = State of the Art
 == Reinforcement Learning
 The AI field has been existing for a long time @works_computing_1950, and has evolved significantly over the years. from its beginnings in symbolic reasoning and rule-based systems @russel2010, to the rise of Machine Learning (ML) and its subfields such unsupervised learning, supervised learning, and reinforcement learning (RL).
