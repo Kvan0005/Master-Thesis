@@ -143,7 +143,7 @@ The Bellman equation is a fundamental concept in reinforcement learning and Mark
 The Bellman equation is often written as:
 $ V^pi (s) = max_a [ R(s, a) + gamma * sum_(s') T(s' | s, a) * V^pi (s') ] $
 where:
-- $V^pi(s)$ is the value of state $s$ under policy $\pi$
+- $V^pi(s)$ is the value of state $s$ under policy $pi$
 - $R(s, a)$ is the reward received for taking action $a$ in state $s$
 - $gamma$ is the discount factor, which determines the importance of future rewards
 - $T(s' | s, a)$ is the transition probability from state $s$ to state $s'$ given action $a$
