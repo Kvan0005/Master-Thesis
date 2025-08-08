@@ -64,23 +64,24 @@ An agent in RL is a learner or decision-maker equipped with tools to observe and
 
 == Single Agent Reinforcement Learning
 === Markov Decision Process
-In Single-Agent Reinforcement Learning (RL), the methodology used to model the environment is the Markov Decision Process (MDP) @puterman_markov_2009. The MDP is a mathematical framework used to model the interaction between an agent and its environment@bellman_markovian_1957. It is often employed to represent the decision-making process of an agent in a stochastic environment. The MDP is a powerful tool that allows the environment to be modeled in a way that is both easy to understand and analyze.
+In Single-Agent RL, the environment is modeled using a Markov Decision Process (MDP) @puterman_markov_2009. The MDP is a mathematical framework to model interaction between an agent and its environment @bellman_markovian_1957. It represents the decision-making process of an agent in a stochastic environment and provides a powerful tool for analysis.
 
-The Markov Decision Process (MDP) @SpinningUp2018 is often represented as a 5-tuple $angle.l S, A, T, R, rho_0 angle.r$, where the elements are:
+The MDP @SpinningUp2018 is typically represented as a 5-tuple $angle.l S, A, T, R, rho_0 angle.r$, where:
 - $S$ is the state space
 - $A$ is the action space
 - $T$ is the transition function
 - $R$ is the reward function
 - $rho_0$ is the initial state distribution
 
-One of the key properties of the MDP is that it is based on the Markov property, which states that the future state of a system depends only on the current state and not on previous states. In mathematical terms, this is  represented as:
+A key property of the MDP is the Markov property, which states that the future state depends only on the current state and action, not on previous states:
 $Pr(s_(t+1) | s_t, a_t) = Pr(s_(t+1) | s_t, a_(t-1), ..., s_0, a_0)$
 
 Another strength of formalizing a problem to an MDP is that it allows abstraction of all sensory, memory, and control aspects (ref: RL: An Introduction, Sutton and Barto) into three simple signals between the agent and the environment:
 - the state $s$
 - the action $a$
 - the reward $r$
-These signals are used to represent the interaction between the agent and the environment, allowing the agent to learn from its experiences and improve, the imporvement are mainly done by adjusting the policy of the agent, which is futher explained with the Bellman equation in MDPs section. Another important aspect of the MDP is the hypothesis of the environment being stationnary, which means that the environment does not change over time such that for same state $s$ and action $a$, the transition and reward distributions remain the same. This is an important assumption because it allows the agent to learn a policy that is optimal for the environment.
+These signals allow the agent to learn from experience by adjusting its policy, further explained via the Bellman equation in the MDP section. Another important assumption is that the environment is stationary: for the same state $s$ and action $a$, transition and reward distributions remain unchanged over time. This allows the agent to learn an optimal policy.
+
 
 ==== State
 One way to represent the environment is through a state. A state is the encapsulation of all information about the environment at a given time. As an example, in the game of tic-tac-toe, the representation of the board at a given time, such as in this image @state, is a state. However, a state is not only the representation of the board but also includes information about the player's turn. Therefore, a state represents the environment at a given time.
