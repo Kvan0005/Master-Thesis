@@ -46,21 +46,21 @@ In the following sections, we will delve into the theoretical foundations of the
 
 = State of the Art
 == Reinforcement Learning
-The AI field has been existing for a long time @works_computing_1950, and has evolved significantly over the years. from its beginnings in symbolic reasoning and rule-based systems @russel2010, to the rise of Machine Learning (ML) and its subfields such unsupervised learning, supervised learning, and reinforcement learning (RL).
+The field of AI has existed for a long time @works_computing_1950 and has evolved significantly over the years, from its beginnings in symbolic reasoning and rule-based systems @russel2010 to the rise of Machine Learning (ML) and its subfields such as unsupervised learning, supervised learning, and reinforcement learning (RL).
 
 === Supervised Learning
-Supervised Learning (SL) is a subfield of Machine Learning (ML) focused on training a model from a set of labeled data. The goal of SL is to learn a function that maps the input data (e.g., an image) to output data (or labels, e.g., the class of the image) as accurately as possible. SL is often used in computer vision and natural language processing (e.g., @kamath_deep_2019), where the goal is to create a model capable of classifying data into specific classes based on the data learned during training.
+Supervised Learning (SL) is a subfield of Machine Learning (ML) focused on training a model using labeled data. The goal of SL is to learn a function that maps input data (e.g., an image) to output data (or labels, e.g., the class of the image) as accurately as possible. SL is often used in computer vision and natural language processing (e.g., @kamath_deep_2019), where the objective is to create a model capable of classifying data into specific classes based on training data.
 
 === Unsupervised Learning
-Unsupervised Learning (UL) is another subfield of ML that focuses on learning from unlabeled data. The goal of UL is to discover patterns or structures in the data without any prior knowledge of the labels. UL is often used in clustering and dimensionality reduction tasks, where the goal is to group similar data points together or reduce the dimensionality of the data while preserving its structure.
+Unsupervised Learning (UL) is another subfield of ML that focuses on learning from unlabeled data. The goal is to discover patterns or structures in the data without prior knowledge of labels. UL is often used in clustering and dimensionality reduction tasks, where the aim is to group similar data points or reduce data dimensionality while preserving structure.
 
 === Reinforcement Learning
-RL is a subfield of Machine Learning (ML) that focuses on learning from the interaction between an agent and its environment. Compared to supervised learning, the learner (agent) is not provided with explicit information about the environment or which actions to perform. RL is based on trial and error: by interacting with the environment, the learner acquires or loses points, which serve as the only source of feedback. Thus, agents attempt to maximize the number of rewards obtained @sutton_reinforcement_2014.
+RL is a subfield of ML focused on learning through interaction between an agent and its environment. Unlike supervised learning, the learner (agent) is not provided explicit instructions about the environment or which actions to perform. RL relies on trial and error: by interacting with the environment, the learner acquires or loses points, which serve as the only source of feedback. Thus, agents attempt to maximize the number of rewards obtained @sutton_reinforcement_2014.
 
 ==== Agent
-An agent in RL can be seen as a learner or decision-maker equipped with a set of tools to observe and interact with its environment. These tools are generally divided into two components:
-- Sensors used to perceive the environment and gather information (e.g., the five human senses).
-- Actuators used to interact with the environment and perform actions (e.g., human hands or legs).
+An agent in RL is a learner or decision-maker equipped with tools to observe and interact with its environment. These tools generally consist of two components:
+- Sensors, used to perceive the environment and gather information (e.g., the five human senses).
+- Actuators, used to interact with the environment and perform actions (e.g., human hands or legs).
 
 == Single Agent Reinforcement Learning
 === Markov Decision Process
