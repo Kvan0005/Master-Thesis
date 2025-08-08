@@ -27,38 +27,29 @@
     )
   ),
 logo: "ulb_logo.jpg",
-abstract: "In recent years, artificial intelligence (AI) and machine learning (ML) systems have demonstrated remarkable capabilities in real world applications. However, their performance often degrades in the presence of untrained elements or domain shifts. One pertinent challenge is evaluating how the robustness and performance of a given algorithm—particularly those used in autonomous systems—change when the environment is perturbed by the introduction of unknown or novel elements. This research is situated within the broader field of AI robustness and domain generalization, with applications of intelligent decision-making systems.
+abstract: "In recent years, artificial intelligence (AI) and machine learning (ML) systems have demonstrated remarkable capabilities in real world applications. However, their performance often degrades in the presence of untrained elements or domain shifts. One pertinent challenge is evaluating how the robustness and performance of a given algorithm-particularly those used in autonomous systems-change when the environment is perturbed by the introduction of unknown or novel elements. This research is situated within the broader field of AI robustness and domain generalization, with applications of intelligent decision-making systems.
 "
 )
 
 = Introduction
+Immagine a fleet of autonomous vehicles navigating through a city, each equipped with advanced Artificial Intelligence (AI) algorithms to accomplish a specific mission, while navigating through a complex and hazardous environment and still achieving a optimum solution by cooperation. This scenario is no longer a far-fetched vision of the future, but a current reality, driven by recent advancements in AI and Machine Learning (ML). In recent years, AI and ML research
+has made significant leaps. However, even with these advancements, AI systems still struggle sometimes to escape bottlenecks which impact drastically the learning efficiency.
 
-== Background and Objectives
-Multi-Agent Reinforcement Learning (MARL) is a subfield of the Reinforcement Learning domain that focuses on the interaction between multiple agents in a shared environment. In recent years, an increasing amount of research has been conducted in this field to resolve issues that have arisen in the real world @weiss_multiagent_2001 @stone_multiagent_1997. However, most of the research has been done through simulations in environments that do not involve element that has not been added in the training settings. This thesis aims to evaluate the learning performance of MARL algorithms when moving from a known environment with proven working results to a slightly modified environment by adding unknown elements.
+This work aims to investigate how bottlenecks emerge by perturbing existing environment with the addition of new elements in the environment, By doing so, we can observe how the performance of previously designed algorithms is affected by the introduction of these new pertubations.
 
-Currently, the research is focused on the environment of #link("https://github.com/yamoling/lle")[LLE] (Laser Learning Reinforcement) @molinghen2023lle , which is an environment created based on the original game. The environment is a 2D world, also known as a grid world, where one or more agents interact in a cooperative manner. The goal of each individual agent is to reach an exit point while acquiring rewards (in the form of gems) and avoiding obstacles.
+The current work is focused on the environment of Laser Learning Environment (LLE) @molinghen2023lle , which a toy environment created with the goal of evaluating the performance of Multi-Agent Reinforcement Learning (MARL) algorithms. The goal of the environment is by controling a agent in a group of agents to reach an exit point while collecting gems and avoiding obstacles. 
 
-The objective of the Master's thesis is to develop a new feature in the LLE environment that was also included in the original game Oxen. Moreover, this feature has another objective: to add a new element to the environment that is not included in the agents learning process. This allows for the re-evaluation of the performance of already fine-tuned algorithms trained on the original environment and the observation of any possible bottlenecks that may arise from the addition of these new elements.
-While many Artificial Intelligence (AI) algorithms perform well under training conditions, their ability to adapt to unfamiliar scenarios is limited.
+The core objective of the Master's thesis Work is to develop a new feature in the LLE environment that was also included in the original game Oxen. Moreover, this feature has another objective: we aims to observe if it is possible to have emerging bottlenecks just by slightly modifying the environment. This allows for the re-evaluation of the performance
+of already fine-tuned algorithms from original environment and the obser-
+vation of any possible bottlenecks that may arise from the addition of these new elements.
 
+This investigation not only contributed to the extension of the LLE, but also provide insights into the robustness of MARL algorithms in increasingly complex environments.
 
-// (temporary place) temporary place for some definition
-// - State Space $S$
-// - Agent i action space $A_i$
-// - joint Action Space *$A$* = $A_1 times A_2 times ... times A_n$ where $n$ is the number of agents
-// - specific action in the joint action space denoted *$a$* st. *$a$*$in$*$A$*  
-// - transition function $T$ 
-// - reward function $R$
-// the notation will be using the notation of ref to book #link("https://spinningup.openai.com/_/downloads/en/latest/pdf/")[here]
+In the following sections, we will delve into the theoretical foundations of the work, exploring the concepts of Multi-Agent Systems (MAS), Multi-Agent Reinforcement Learning (MARL), and the challenges associated with these systems. We will also discuss the implementation details of the LLE environment and the new feature added to it. Finally, we will present the main question that will be the center of master thesis. A appendix will also be provided to detail about basic mathematical sybols used in the work #ref(<notations>), and acronyms used in the work #ref(<acronyms>).
 = State of the Art
-== Introduction
-// all the following sections are from the article "Cooperative Multi-Agent Learning: The State of the Art" by [ref to article]
-!!(this section contains content from the article "Cooperative Multi-Agent Learning: The State of the Art" by [ref to article])!!
-
-Distributed Artificial Intelligence (DAI) is a field of study that has been rising over the last two decades, mainly focused on distributed systems. A distributed system, as defined by @panait_cooperative_2005, is #quote("where a number of entities work together to cooperatively solve problems"). This kind of study is not new, it has been explored for a long time. What is new, however, is the rise of the internet and the multitude of electronic devices available today, which has created the need for a new field of study: DAI. DAI is essentially the study of the interaction between multiple artificial intelligences (AIs) or agents in a distributed system.
-
-=== Multi-Agent Systems vs. Distributed Problem Solving
-Within the field of DAI, two main subfields can be identified. The more traditional one is Distributed Problem Solving (DPS), which follows a divide-and-conquer paradigm. DPS focuses on distributing the problem to independent agents (or slaves) that solve it independently. On the other hand, Multi-Agent Systems (MAS) emphasize interaction between agents.
+== Origin of Multi-Agent Systems
+Distributed Artificial Intelligence (DAI) is a field of study that has been rising over the last two decades, mainly focused on distributed systems. A distributed system, as defined by #cite(<panait_cooperative_2005>,form:"prose"), is #quote("where a number of entities work together to cooperatively solve problems"). This kind of study is not new, it has been explored for a long time@weiss_multiagent_2001@stone_multiagent_1997. What is new, however, is the rise of the internet and the multitude of electronic devices available today, which has created the need for a new field of study: DAI. DAI is essentially the study of the interaction between multiple artificial intelligences (AIs) or agents in a distributed system.
+Within this field, two main subfields can be identified. The more traditional one is Distributed Problem Solving (DPS), which follows a divide-and-conquer paradigm. DPS focuses on distributing the problem to independent agents (or slaves) that solve it independently. On the other hand, Multi-Agent Systems (MAS) emphasize interaction between agents.
 
 === Multi-Agent Systems
 In MAS, a few constraints are imposed on agents. Even though agents work together to solve a problem in the same environment, they are not able to share their knowledge of the environment with each other. They can only access the information they individually perceive, which in RL is often referred to as a local observation. This is an important point because if agents were able to share their knowledge, they could simply synchronize it and solve the problem as a DPS problem if the problem required no interaction between agents #todo("may require more writing").
@@ -73,15 +64,18 @@ Multi-Agent Learning (MAL)
 - Explain why adding a new element in the environment is interesting
 - Explain LLE agent standards
 
-== Machine Learning
-(todo):
-- Decide whether this section is needed to explain the basics of ML and to split between supervised, unsupervised, and RL
+== Reinforcement Learning
+=== AI foundations
+The AI field has been existing for a long time @works_computing_1950, and has evolved significantly over the years. from its early beginnings in symbolic reasoning and rule-based systems @russel2010, to the rise of Machine Learning (ML) and its subfields such unsupervised learning, supervised learning, and reinforcement learning (RL). These subfields have been developed to address different types of problems and have their own strengths and weaknesses.
 
 === Supervised Learning
 Supervised Learning (SL) is a subfield of Machine Learning (ML) focused on training a model from a set of labeled data. The goal of SL is to learn a function that maps the input data (e.g., an image) to output data (or labels, e.g., the class of the image) as accurately as possible. SL is often used in computer vision and natural language processing (e.g., @kamath_deep_2019), where the goal is to create a model capable of classifying data into specific classes based on the data learned during training.
 
+=== Unsupervised Learning
+Unsupervised Learning (UL) is another subfield of ML that focuses on learning from unlabeled data. The goal of UL is to discover patterns or structures in the data without any prior knowledge of the labels. UL is often used in clustering and dimensionality reduction tasks, where the goal is to group similar data points together or reduce the dimensionality of the data while preserving its structure.
+
 === Reinforcement Learning
-Reinforcement Learning (RL) is a subfield of Machine Learning (ML) that focuses on learning from the interaction between an agent and its environment. Compared to supervised learning, the learner (agent) is not provided with explicit information about the environment or which actions to perform. RL is based on trial and error: by interacting with the environment, the learner acquires or loses points, which serve as the only source of feedback. Thus, agents attempt to maximize the number of points they receive @sutton_reinforcement_2014.
+RL is a subfield of Machine Learning (ML) that focuses on learning from the interaction between an agent and its environment. Compared to supervised learning, the learner (agent) is not provided with explicit information about the environment or which actions to perform. RL is based on trial and error: by interacting with the environment, the learner acquires or loses points, which serve as the only source of feedback. Thus, agents attempt to maximize the number of points they receive @sutton_reinforcement_2014.
 
 ==== Agent
 An agent in RL can be seen as a learner or decision-maker equipped with a set of tools to observe and interact with its environment. These tools are generally divided into two components:
@@ -89,7 +83,7 @@ An agent in RL can be seen as a learner or decision-maker equipped with a set of
 - Actuators used to interact with the environment and perform actions (e.g., human hands or legs).
 == Single Agent Reinforcement Learning
 === Markov Decision Process
-In Single-Agent Reinforcement Learning (RL), the methodology used to model the environment is the Markov Decision Process (MDP) @puterman_markov_2009. The MDP is a mathematical framework used to model the interaction between an agent and its environment (#todo find the lost ref). It is often employed to represent the decision-making process of an agent in a stochastic environment. The MDP is a powerful tool that allows the environment to be modeled in a way that is both easy to understand and analyze.
+In Single-Agent Reinforcement Learning (RL), the methodology used to model the environment is the Markov Decision Process (MDP) @puterman_markov_2009. The MDP is a mathematical framework used to model the interaction between an agent and its environment@bellman_markovian_1957. It is often employed to represent the decision-making process of an agent in a stochastic environment. The MDP is a powerful tool that allows the environment to be modeled in a way that is both easy to understand and analyze.
 
 The Markov Decision Process (MDP) @SpinningUp2018 is often represented as a 5-tuple $angle.l S, A, T, R, rho_0 angle.r$, where the elements are:
 - $S$ is the state space
@@ -98,19 +92,19 @@ The Markov Decision Process (MDP) @SpinningUp2018 is often represented as a 5-tu
 - $R$ is the reward function
 - $rho_0$ is the initial state distribution
 
-One of the key properties of the MDP is that it is based on the Markov property, which states that the future state of a system depends only on the current state and not on previous states. In mathematical terms, this is often represented as:
+One of the key properties of the MDP is that it is based on the Markov property, which states that the future state of a system depends only on the current state and not on previous states. In mathematical terms, this is  represented as:
 $Pr(s_(t+1) | s_t, a_t) = Pr(s_(t+1) | s_t, a_(t-1), ..., s_0, a_0)$
 
-Another strength of reducing a problem to an MDP is that it allows abstraction of all sensory, memory, and control aspects (ref: RL: An Introduction, Sutton and Barto) into three simple signals between the agent and the environment:
+Another strength of formalizing a problem to an MDP is that it allows abstraction of all sensory, memory, and control aspects (ref: RL: An Introduction, Sutton and Barto) into three simple signals between the agent and the environment:
 - the state $s$
 - the action $a$
 - the reward $r$
-It also introduces key functions such as the Bellman equation, which uses the Markov property to represent the relationship between the value of a state and the value of its successor states.
+It also introduces key functions such as the Bellman equation which is explained futher, which uses the Markov property to represent the relationship between the value of a state and the value of its successor states. But before diving into the Bellman equation, it is also important to understand that the objectives of the agent in RL are to maximize the expected return, Which is needed to develop an effective policy for the agent.
 
 ==== State
 One way to represent the environment is through a state. A state is an abstract way to describe the combined information of all elements in the environment. As an example, in the game of tic-tac-toe, the representation of the board at a given time, such as in this image @state, is a state. However, a state is not only the representation of the board but also includes information about the player's turn. Therefore, a state represents the environment at a given time.
 
-In mathematical notation, $s$ is usually used to represent a state, and $S$ to represent the state space. The state space is the set of all possible states for a given environment.
+In mathematical notation, $s$ is used to represent a state, and $S$ to represent the state space. The state space is the set of all possible states for a given environment.
 - $S$ is the state space of the environment
 - $s$ is a state in the state space, given that $s in S$ ($s'$ may be used for a new state)
 - $s_t$ is the state at time $t$
@@ -124,7 +118,7 @@ An observation is a partial description of a state. Instead of providing complet
 An analogy for an observation is being in a room where only what is in front is visible, while what is behind cannot be seen. In this case, the observation is the information visible in front, but not the complete information about the room.
 
 === Action
-An action refers to the possible movement the agent can perform in the environment. In the case of the game of tic-tac-toe, the possible actions are placing a mark in one of the available cells out of the 9 cells. For example, in the previous example @state, the "O" player has the following possible actions to choose from: [top left, top center, middle right, bottom left, bottom center, bottom right]. In mathematical notation, $a$ is usually used to represent an action (e.g., "top left") and $A$ to represent the action space (e.g., the list of all actions mentioned above).
+An action refers to the possible movement the agent can perform in the environment. In the case of the game of tic-tac-toe, the possible actions are placing a mark in one of the available cells out of the 9 cells. For example, in the previous example @state, the "O" player has the following possible actions to choose from: [top left, top center, middle right, bottom left, bottom center, bottom right]. In mathematical notation, $a$ is used to represent an action (e.g., "top left") and $A$ to represent the action space (e.g., the list of all actions mentioned above).
 - $A$ is the action space of the environment
 - $A(s)$ is the action space available in state $s$ (e.g., the list of all actions available in the state $s$)
 - $a$ is an action in the action space, given that $a in A$
@@ -151,18 +145,21 @@ The reward function takes an initial state, an action, and a final state as inpu
 
 Returning to the sports example, the score can be seen as the motivation to perform the action based on a certain goal. For example, on a treadmill when aiming to lose a certain amount of calories, the reward function is the calories burned. Running faster places the body in a state where more calories are burned but also increases the likelihood of a cramp.
 
-The reward function is often represented as:
+The reward function is represented as:
 $ R(s' | a, s) $
 where $s$ is the initial state, $a$ is the action, and $s'$ is the final state.
 
 Mathematically, the reward function is:
 $ R : S times A times S -> bb(R) $
 
-The reward resulting from the reward function is often assigned to the variable $r$, and the reward at time $t$ is commonly written as:
+The reward resulting from the reward function is assigned to the variable $r$, and the reward at time $t$ is commonly written as:
 $ r_t = R(s_(t+1) | a_t, s_(t)) $
+== Bellman Equation in MDPs
+The Bellman equation is a fundamental concept in reinforcement learning and Markov Decision Processes (MDPs). It describes the relationship between the value of a state and the values of its successor states. The Bellman equation
+#todo("CheckPoint")
 
 === Return
-Unlike the reward, which is a scalar value given at a specific time, the return is the cumulative reward observed over a period of time. It can be either finite or infinite. In the finite case, the return is also called the #strong("finite-horizon undiscounted return") and is often represented as:
+Unlike the reward, which is a scalar value given at a specific time, the return is the cumulative reward observed over a period of time. It can be either finite or infinite. In the finite case, the return is also called the #strong("finite-horizon undiscounted return") and is represented as:
 $ R("trajectory placeholder") = sum_(t=0)^(T-1) r_t $ #todo("need better notation due to conflict with the reward and multi-agent notation")
 where $T$ is the time horizon and $tau$ is the trajectory of the agent.
 
@@ -185,7 +182,7 @@ where $o_t$ is the observation, $a_t$ is the action, and $r_t$ is the reward at 
 The main difference between a trajectory and a history is that a trajectory contains all information about the environment, while a history contains only the information gathered by a specific agent. An analogy is an escape room: the history is what the player recalls from past actions and observations, while the trajectory is what the game master (who knows all the secret information that the player does not know) sees of the player's actions in the escape room.
 
 === Policy
-A policy can be seen as the decision-making rule of the agent, where for any given state it has a mapping to a set of probabilities over the possible actions. The policy is often represented as:
+A policy can be seen as the decision-making rule of the agent, where for any given state it has a mapping to a set of probabilities over the possible actions. The policy is represented as:
 $ pi_theta : S -> Delta_A $
 where $pi$ is the policy, $theta$ is the parameter of the policy, $S$ is the state space, and $Delta_A$ is the set of probability distributions over the action space $A$. thus maze solving agent that follows a policy $pi$ (e.g. always taking same turn) with $theta$ (e.g. prefer left ) will be aswering "LEFT" to 
 the question "What is the next action to take in state $s$?"
@@ -193,12 +190,12 @@ the question "What is the next action to take in state $s$?"
 A policy parameter $theta$ is the set of parameters that is used in the policy to determine the action probabilities. These parameters are typically learned from data through a training process.
  
 ==== Optimal Policy
-The optimal policy is the policy that maximizes the expected return (or value) of the agent. It is often represented as:
+The optimal policy is the policy that maximizes the expected return (or value) of the agent. It is represented as:
 $ pi^* = "argmax"_(pi) EE[R("trajectory placeholder") | pi] $
 
 === Action-Utility Function
 #todo("double check the action-utility function definition")
-The action-utility function represents the expected return of a given state-action pair. It is often expressed as:
+The action-utility function represents the expected return of a given state-action pair. It is expressed as:
 $ Q(s, a) = EE[ sum_(t=0)^(infinity) gamma^t r_t | s_0 = s, a_0 = a, pi ] $
 where $Q(s, a)$ is the action-utility function, $EE$ is the expected value, $gamma$ is the discount factor, and $r_t$ is the reward at time $t$.
 
@@ -206,7 +203,7 @@ The action-utility function is frequently used to evaluate the expected return o
 
 === Value Function
 #todo("same as action-utility function")
-The value function represents the expected return of a given state under a policy. It is often expressed as:
+The value function represents the expected return of a given state under a policy. It is expressed as:
 $ V(s) = EE[ sum_(t=0)^(infinity) gamma^t r_t | s_0 = s, pi ] $
 where $V(s)$ is the value function, $E$ is the expected value, $gamma$ is the discount factor, and $r_t$ is the reward at time $t$.
 
@@ -238,7 +235,7 @@ In MARL, this problem is particularly pronounced because rewards are often share
 === Current Approaches
 The current approaches to solving the challenges of credit assignment and non-stationarity in MARL is to use the Centralized Training with Decentralized Execution (CTDE) paradigm @dmap_2020_icaps_factored_2020 this approach allows agents to learn in a centralized manner during training while executing their policies independently during inference or real world deployment. This methode has been shown to be effective in various MARL environments @sutton_reinforcement_2014, @schaul_prioritized_2016.
 
-= LLE Environment
+= Laser Learning Environment
 == Overview
 The Laser Learning Environment (LLE) is a 2D grid world with discrete time steps and multiple cooperative agents. The game is based on the original game Oxen, where the goal of each agent is to reach an exit point while acquiring gems (bonus points). All agents cooperate to reach their respective exit points while avoiding obstacles. The environment is designed to be simple and easy to understand while still being challenging enough to test the performance of MARL algorithms.
 
@@ -467,17 +464,14 @@ By adding a third dimension to the environment, there is a need to modify the cu
 === Proximity channel
 A instresting feature that could be added to the LLE environment is a proximity channel. This channel would allow agents to communicate with each other when they are close enough, enabling them to share information in some limited way. 
 
-= Time Plan
-#gantt(yaml("gantt.yaml"))
-
 #let values = (
   "bib/zotero.bib",
   "bib/externe.bib"
 )
-#bibliography(values)<bibliography>
+#bibliography(values, full: true)<bibliography>
 
 = Appendix
-== Notations
+== Notations<notations>
 #show table.cell.where(y: 0): strong
 #set table(
   stroke: (x, y) => if y == 0 {
@@ -501,7 +495,7 @@ A instresting feature that could be added to the LLE environment is a proximity 
   [$bb(R)$], [the set of real numbers],
   [$Delta_X$], [the set of probability distributions over the set $X$],
   [$t$], [a time step that belongs to the set of natural numbers $t in bb(N)$],
-  [$EE$], [the expected value],
+  [$EE_x$], [the expected value over the value $x$],
   [$gamma$], [the discount factor, which is a real number in the interval $[0,1]$],
 
 
@@ -544,7 +538,7 @@ A instresting feature that could be added to the LLE environment is a proximity 
   // [$tau$], [a transition defined as $tau = angle.l s, cal(a), r, s' angle.r$],
 )
 // add acronyms
-== Acronyms
+== Acronyms <acronyms>
 #show table.cell.where(y: 0): strong
 #set table(
   stroke: (x, y) => if y == 0 {
@@ -574,3 +568,7 @@ A instresting feature that could be added to the LLE environment is a proximity 
   [LLE], [Laser Learning Environment],
   [MARL], [Multi-Agent Reinforcement Learning],
 )
+
+
+== Time Plan <timeplan>
+#gantt(yaml("gantt.yaml"))
